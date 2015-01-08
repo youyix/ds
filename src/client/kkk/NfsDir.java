@@ -1,6 +1,9 @@
 package client.kkk;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -30,8 +33,10 @@ import client.nfs.Nfs;
 import client.nfs.NfsClient;
 import client.nfs.NfsCookie;
 import client.nfs.NfsData;
+import client.nfs.ReadArgs;
 import client.nfs.ReadDirArgs;
 import client.nfs.ReadDirRes;
+import client.nfs.ReadRes;
 import client.nfs.SAttr;
 import client.nfs.Stat;
 import client.nfs.TimeVal;
@@ -83,7 +88,7 @@ public class NfsDir {
 		}
 		
 		if ( fh.status != 0 ) {
-			System.out.println("ZZZZZZZ " + fh.status);
+			System.err.println("error " + fh.status);
 			System.exit(0);
 		} else {
 		  byte[] hh = fh.directory.value;
@@ -96,14 +101,11 @@ public class NfsDir {
 		  }
 		  nfsc.getClient().setAuth(auth);
 		}
-//		System.out.println("Mount !!");
 	}
 	
 	public client.nfs.FHandle doo(Path p) { 
 		client.nfs.FHandle fh = root;
-//		System.out.println("doo");
 		for ( int i=downloadDir.getNameCount(); i<p.getNameCount(); i++ ) {
-//			System.out.println("mmmm");
 			Path pp = p.getName(i);
 			DirOpRes res = lookup(fh, pp.toString());
 			if ( res.status == Stat.NFS_OK ) {
@@ -208,9 +210,9 @@ public class NfsDir {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-		    System.out.println("4 Not Fine " + dp.status);
+//		    System.out.println("4 Not Fine " + dp.status);
 		} else {
-		    System.out.println("4 Fine");
+//		    System.out.println("4 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -289,19 +291,17 @@ public class NfsDir {
 		}
 
 		if ( rdr.status != Stat.NFS_OK ) {
-//		    System.out.println("NNN " + rdr.status);
 		    System.exit(0);
 		} else {
 			List<EntryWrapper> ews = new ArrayList<EntryWrapper>();
 			
 		    Entry entries = rdr.readdirok.entries;
-//		    System.out.println("VV " + rdr.readdirok.eof);
 		    Entry e = entries;
 		    if ( rdr.readdirok.entries != null ) {
 		        do { 
 		        	FAttr attr = getAttr(p, e.name.value);
 		        	
-		        	if ( attr != null ) {
+		        	if ( (attr != null && ! e.name.value.startsWith(".") ) || e.name.value.equals("..") ) {
 		        		ews.add(new EntryWrapper(e.name, attr));
 		        	}
 		        	
@@ -321,5 +321,35 @@ public class NfsDir {
 
 	}
 
+	
+	public boolean readFile(Path p, String filename, EntryWrapper entry) {
+		client.nfs.FHandle fh = doo(Paths.get(p.toString(), filename));
+		ReadArgs ra = new ReadArgs();
+		ra.file = fh;
+		ra.offset = 0;
+		ra.count = entry.attribute.size;
+
+		ReadRes rr = null;
+		try {
+			rr = nfsc.NFSPROC_READ_2(ra);
+		} catch (OncRpcException | IOException e) {
+			e.printStackTrace();
+		}
+		if ( rr.status != Stat.NFS_OK ) {
+//		    System.out.println("6 Not Fine " + rr.status);
+		} else {
+			try {
+//				System.out.println("6 Fine");
+				NfsData data = rr.read.data;
+				FileOutputStream output = new FileOutputStream(Utils.convertPath(p, downloadDir, filename).toString());
+				output.write(data.value);
+				output.close();
+				return true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 }
 

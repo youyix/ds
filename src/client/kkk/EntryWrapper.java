@@ -21,9 +21,13 @@ public class EntryWrapper {
 	}
 	
 	public String getType() {
-		String type = "";
+		
+		String type = "..";
+		if ( attribute == null ) {
+			return type;
+		}
 		switch ( attribute.type  ) {
-		case 1: type = "Reg File"; break;
+		case 1: type = "Reg"; break;
 		case 2: type = "Dir"; break;
 		default: type = "Others";
 		}

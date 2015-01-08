@@ -29,13 +29,17 @@ import client.nfs.TimeVal;
 import client.nfs.WriteArgs;
 
 public class NfsClientDelegate {
-	private Path dir;
+	private Path localDir;
 	private MountClient mnt;
 	private client.nfs.FHandle root;
 	private NfsClient nfsc;
+	private String remoteDir;
+	private String host;
 	
-	public NfsClientDelegate(Path dir) {
-		this.dir = dir;
+	public NfsClientDelegate(String host, String remoteDir, Path localDir) {
+		this.localDir = localDir;
+		this.host = host;
+		this.remoteDir = remoteDir;
 		try {
 			mount();
 		} catch (OncRpcException e) {
@@ -46,13 +50,13 @@ public class NfsClientDelegate {
 	}
 	
 	public void mount() throws OncRpcException, IOException {
-		InetAddress ia = InetAddress.getByName("192.168.0.12");
+		InetAddress ia = InetAddress.getByName(host);
 		mnt = new MountClient(ia,OncRpcProtocols.ONCRPC_UDP);
 		
 		OncRpcClientAuth auth = new OncRpcClientAuthUnix("zhenfeinie",501,20);
 		mnt.getClient().setAuth(auth);
 		
-		String mntPoint = "/Users/cici/nfss/";
+		String mntPoint = remoteDir;
 		FHStatus fh = null;
 		try {
 			fh = mnt.MOUNTPROC_MNT_1(new DirPath(mntPoint));
@@ -62,7 +66,7 @@ public class NfsClientDelegate {
 		}
 		
 		if ( fh.status != 0 ) {
-			System.out.println("ZZZZZZZ " + fh.status);
+//			System.out.println("ZZZZZZZ " + fh.status);
 			System.exit(0);
 		} else {
 		  byte[] hh = fh.directory.value;
@@ -70,15 +74,12 @@ public class NfsClientDelegate {
 		  nfsc = new NfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
 		  nfsc.getClient().setAuth(auth);
 		}
-		System.out.println("Mount !!");
+//		System.out.println("Mount !!");
 	}
 	
 	public client.nfs.FHandle doo(Path p, String filename) { 
-//		int count = p.getNameCount() - dir.getNameCount();
 		client.nfs.FHandle fh = root;
-		System.out.println("doo");
-		for ( int i=dir.getNameCount(); i<p.getNameCount(); i++ ) {
-			System.out.println("mmmm");
+		for ( int i=localDir.getNameCount(); i<p.getNameCount(); i++ ) {
 			Path pp = p.getName(i);
 			DirOpRes res = lookup(fh, pp.toString());
 			if ( res.status == Stat.NFS_OK ) {
@@ -105,12 +106,12 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dr.status != Stat.NFS_OK ) {
-			System.out.println("Not Fine");
+//			System.out.println("Not Fine");
 		} else {
-			System.out.println("Fine");
-			client.nfs.FHandle f = dr.diropok.file;
-			FAttr f_a = dr.diropok.attributes; 
-			System.out.println(f_a.size);
+//			System.out.println("Fine");
+//			client.nfs.FHandle f = dr.diropok.file;
+//			FAttr f_a = dr.diropok.attributes; 
+//			System.out.println(f_a.size);
 			return dr;
 		}
 		return null;
@@ -146,9 +147,9 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-		    System.out.println("3 Not Fine " + dp.status);
+//		    System.out.println("3 Not Fine " + dp.status);
 		} else {
-		    System.out.println("3 Fine");
+//		    System.out.println("3 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -204,7 +205,10 @@ public class NfsClientDelegate {
 		}
 		
 		
-		DirOpRes res =  lookup(fh, filename);
+		DirOpRes res = lookup(fh, filename);
+		if (res == null) {
+			return flag;
+		}
 		if ( res.status != Stat.NFS_OK ) {
 			return flag;
 		}

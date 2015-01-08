@@ -21,35 +21,41 @@ import java.util.List;
  */
 public class Watcher extends Thread{
 	
-	private static NfsClientDelegate delegate = new NfsClientDelegate(Paths.get("/Users/niezhenfei/kkk"));
+	private static NfsClientDelegate delegate;
 	
-	public static void main(String[] args) throws IOException {
-		Watcher w = new Watcher(Paths.get("/Users/niezhenfei/kkk"));
-		w.start();
-	}
+	
+//	public static void main(String[] args) throws IOException {
+//		Watcher w = new Watcher(Paths.get("/Users/niezhenfei/kkk"));
+//		w.start();
+//	}
 	
 	private final WatchService watcher;
-	public final Path dir;
+	public final Path localDir;
 	private volatile boolean flag = true;
+	private String remoteDir;
+	private String host;
 	
 	List<Watcher> wooos;
 	
-	public Watcher( Path dir ) throws IOException {
+	public Watcher( String host, String remoteDir, Path localDir ) throws IOException {
 		this.watcher = FileSystems.getDefault().newWatchService();
-		dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-	    this.dir = dir;
-	    
+		localDir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+	    this.localDir = localDir;
 	    wooos = new ArrayList<Watcher>();
+	    this.host = host;
+		this.remoteDir = remoteDir;
+	    
+	    delegate = new NfsClientDelegate(host, remoteDir, localDir);
 	    
 	    init();
 	}
 	
 	public void init() throws IOException {
-		File root = dir.toFile();
+		File root = localDir.toFile();
 		File list[] = root.listFiles(); 
 		for ( File f: list ) {
 			if ( f.isDirectory() ) {
-				Watcher w = new Watcher(f.toPath());
+				Watcher w = new Watcher(host, remoteDir, f.toPath());
 				wooos.add(w);
 				w.start();
 			} else {
@@ -58,7 +64,7 @@ public class Watcher extends Thread{
 	}
 
 	public void start() {
-		System.err.println("Thread for " + dir);
+		System.err.println("Thread for " + localDir);
 		super.start();
 	}
 	
@@ -92,10 +98,10 @@ public class Watcher extends Thread{
                 	@SuppressWarnings("unchecked")
 					WatchEvent<Path> ev = (WatchEvent<Path>)event;
                     Path filename = ev.context();
-                    System.out.println("Delete: " + filename + " " + this.dir);
+                    System.out.println("Delete: " + filename + " " + this.localDir);
                     
                 	for( Watcher w: wooos ) {
-                		if ( w.dir.endsWith(ev.context().toString()) ) {
+                		if ( w.localDir.endsWith(ev.context().toString()) ) {
                 			w.terminates();
                 		}
                 	}
@@ -106,22 +112,23 @@ public class Watcher extends Thread{
                     @SuppressWarnings("unchecked")
 					WatchEvent<Path> ev = (WatchEvent<Path>)event;
                     Path filename = ev.context();
-                    System.out.println("Create: " + filename + " " + this.dir);
+                    System.out.println("Create: " + filename + " " + this.localDir);
                     
-                    File nf = dir.resolve(filename).toFile();
+                    File nf = localDir.resolve(filename).toFile();
                     if ( nf.isDirectory() ) {
                     	Watcher w = null;
 						try {
-							w = new Watcher(nf.toPath());
+							w = new Watcher(host, remoteDir, nf.toPath());
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
         				wooos.add(w);
         				w.start();
         				
-        				delegate.mkDir(dir, filename.toString());
+        				delegate.mkDir(localDir, filename.toString());
                     } else {
-                    	delegate.createFile(dir, filename.toString());
+                    	delegate.createFile(localDir, filename.toString());
+                    	delegate.writeFile(localDir, filename.toString());
                     }
                 }
                 
@@ -132,9 +139,9 @@ public class Watcher extends Thread{
                     Path filename = ev.context();
                     System.out.println("M: " + filename);
                     
-                    File nf = dir.resolve(filename).toFile();
+                    File nf = localDir.resolve(filename).toFile();
                     if ( ! nf.isDirectory() ) {
-                    	delegate.writeFile(dir, filename.toString());
+                    	delegate.writeFile(localDir, filename.toString());
                     } 
                 }
                 
@@ -148,6 +155,6 @@ public class Watcher extends Thread{
             	break;
             }
         }
-		System.err.println("Terminated: " + dir);
+		System.err.println("Terminated: " + localDir);
 	}
 }

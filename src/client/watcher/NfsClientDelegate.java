@@ -3,7 +3,9 @@ package client.watcher;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.acplt.oncrpc.OncRpcAuthenticationException;
 import org.acplt.oncrpc.OncRpcClientAuth;
@@ -14,6 +16,7 @@ import org.acplt.oncrpc.OncRpcProtocols;
 import client.mount.DirPath;
 import client.mount.FHStatus;
 import client.mount.MountClient;
+import client.nfs.AttrStat;
 import client.nfs.CreateArgs;
 import client.nfs.DirOpArgs;
 import client.nfs.DirOpRes;
@@ -21,9 +24,11 @@ import client.nfs.FAttr;
 import client.nfs.FHandle;
 import client.nfs.FileName;
 import client.nfs.NfsClient;
+import client.nfs.NfsData;
 import client.nfs.SAttr;
 import client.nfs.Stat;
 import client.nfs.TimeVal;
+import client.nfs.WriteArgs;
 
 public class NfsClientDelegate {
 	private Path dir;
@@ -154,7 +159,7 @@ public class NfsClientDelegate {
 	public boolean mkDir(Path p, String dirname) {
 		boolean flag = false;
 		
-		client.nfs.FHandle fh =  doo(p, dirname);
+		client.nfs.FHandle fh = doo(p, dirname);
 		//create new dir
 		DirOpArgs where = new DirOpArgs();
 		where.dir = fh;
@@ -189,6 +194,42 @@ public class NfsClientDelegate {
 	}
 	
 	public boolean writeFile(Path p, String filename) {
-		return true;
+		boolean flag = false;
+		client.nfs.FHandle fh = doo(p, filename);
+		Path file = Paths.get(p.toString(), filename);
+		System.out.println(file.toString());
+		byte[] fileArray = null;
+		try {
+			fileArray = Files.readAllBytes(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		DirOpRes res =  lookup(fh, filename);
+		if ( res.status != Stat.NFS_OK ) {
+			return flag;
+		}
+		fh = res.diropok.file;
+		
+		WriteArgs wa = new WriteArgs();
+	    wa.file = fh;
+	    wa.offset = 0;
+	    wa.data = new NfsData(fileArray);
+
+	    AttrStat as = null;
+		try {
+			as = nfsc.NFSPROC_WRITE_2(wa);
+		} catch (OncRpcException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    if ( as.status != Stat.NFS_OK ) {
+	       System.out.println("7 Not Fine " + as.status);
+	    } else {
+	       System.out.println("7 Fine");
+	    }
+		return flag;
 	}
 }

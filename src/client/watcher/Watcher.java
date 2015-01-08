@@ -134,7 +134,7 @@ public class Watcher extends Thread{
                     
                     File nf = dir.resolve(filename).toFile();
                     if ( ! nf.isDirectory() ) {
-                    	
+                    	delegate.writeFile(dir, filename.toString());
                     } 
                 }
                 

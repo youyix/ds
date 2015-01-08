@@ -14,12 +14,13 @@ public class InteractiveControl {
 	private String host;
 	private String remoteDir;
 	private Path currentPath;
-	
+	private Path local;
 	private Watcher watcher;
 	
 	public InteractiveControl(String host, String remoteDir, Path dir) {
 		this.host = host;
 		this.remoteDir = remoteDir;
+		this.local = dir;
 		nfsc = new NfsDir(host, remoteDir, dir);
 		nfsc.mount();
 		currentPath = Paths.get(this.remoteDir);
@@ -42,7 +43,7 @@ public class InteractiveControl {
 		if ( ! verbose ) {
 			for ( int i=0; i<ews.size(); i++  ) {
 				EntryWrapper entry = ews.get(i);
-				System.out.printf("%2d [%5s] %20s\n", i, entry.getType(), entry.filename.value );
+				System.out.printf("%2d [%3s] %20s\n", i, entry.getType(), entry.filename.value );
 			}
 		} else {
 			for ( int i=0; i<ews.size(); i++  ) {
@@ -58,30 +59,27 @@ public class InteractiveControl {
 		
 	}
 	
-	public void open() {
-		
+	public void open(int i) {
+		if ( ! download(i) ) {
+			return;
+		}
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
+		EntryWrapper e = ews.get(i);
+		String filepath = Utils.convertPath(currentPath, local, e.filename.value).toString();
+		String command = "subl " + filepath;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+		} catch (IOException e1) {
+			System.err.println("Cannot open file " + e.filename.value);
+			System.err.println("Please have sublime installed and have `subl` short-cut for it. ");
+			e1.printStackTrace();
+		}
 	}
 	
-	public void rename() {
-//		diropargs from = new diropargs();
-//		from.dir = root;
-//		from.name = new FileName("kkk");
-//
-//		diropargs to = new diropargs();
-//		to.dir = from.dir;
-//		to.name = new FileName("dirkkk");
-//
-//		renameargs ra = new renameargs();
-//		ra.from = from;
-//		ra.to = to;
-//
-//		int status = nfsc.NFSPROC_RENAME_2(ra);
-//		if ( status != Stat.NFS_OK ) {
-//		    System.out.println("Not Fine");
-//		} else {
-//		    System.out.println("Fine");
-//		  
-//		}
+	public boolean rename(int i, String toFilename) {
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
+		EntryWrapper e = ews.get(i);
+		return nfsc.rename(currentPath, e.filename.value, toFilename);
 	}
 	
 	public boolean mkDir(String dirname) {
@@ -99,9 +97,10 @@ public class InteractiveControl {
 		return nfsc.readFile(currentPath, e.filename.value, e);
 	}
 	
-	public boolean delete() {
-		boolean flag = false;
-		return flag;
+	public boolean delete(int i) {
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
+		EntryWrapper e = ews.get(i);
+		return nfsc.deleteFile(currentPath, e.filename.value);
 	} 
 	
 	public void getAttr(int i) {
@@ -110,6 +109,12 @@ public class InteractiveControl {
 		System.out.println(Utils.FAttr2String(e.attribute));
 	} 
 	
+	public boolean cd(int i) {
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
+		EntryWrapper e = ews.get(i);
+		currentPath = currentPath.resolve(e.filename.value);
+		return true;
+	}
 	
 	public void run() {
 		System.out.println(host + ":" + remoteDir + " has mounted.");
@@ -121,46 +126,95 @@ public class InteractiveControl {
 			} else if (s.equals("ll")) {
 				listFiles(true);
 			} else if (s.equals("mkdir")) {
-				String param = in.next();
-				if ( mkDir(param) ) {
-					System.out.printf("Dir %s is created.\n", param);
-				} else {
-					System.out.println("Error to mkdir " + param);
+				try {
+					String param = in.next();
+					if ( mkDir(param) ) {
+						System.out.printf("Dir %s is created.\n", param);
+					} else {
+						System.out.println("Error to mkdir " + param);
+					}
+				} catch(Exception e) {
+					continue;
 				}
 			} else if ( s.equals("touch") ) {
-				String param = in.next();
-				if ( createFile(param) ) {
-					System.out.printf("File %s is created.\n", param);
-				} else {
-					System.out.println("Error to create new file " + param);
+				try {
+					String param = in.next();
+					if ( createFile(param) ) {
+						System.out.printf("File %s is created.\n", param);
+					} else {
+						System.out.println("Error to create new file " + param);
+					}
+				} catch(Exception e) {
+					continue;
 				}
 
-			} else if ( s.equals("touchText") ) {
-				String param = in.next();
-				if ( createFile(param) ) {
-					System.out.printf("File %s is created.\n", param);
-				} else {
-					System.out.println("Error to create new file " + param);
-				}
-				
 			} else if ( s.equals("show") ) {
-				int i = in.nextInt();
-				getAttr(i);
-			} else if ( s.equals("download") ) {
-				int i = in.nextInt();
-				if ( download(i) ) {
-					System.out.printf("File  #%d has been downloaded.\n", i);
-				} else {
-					System.out.println("Error to download file #" + i);
+				try {
+					int i = in.nextInt();
+					getAttr(i);
+				} catch(Exception e) {
+					continue;
 				}
-			} else if (s.equals("exit")) {
+			} else if ( s.equals("download") ) {
+				try {
+					int i = in.nextInt();
+					if ( download(i) ) {
+						System.out.printf("File  #%d has been downloaded.\n", i);
+					} else {
+						System.out.println("Error to download file #" + i);
+					}
+				} catch(Exception e) {
+					continue;
+				}
+			} else if (s.equals("rename")) {
+				try {
+					int i = in.nextInt();
+					String to = in.next();
+					if ( rename(i, to) ) {
+						System.out.printf("File has been renamed to %s.\n", to );
+					} else {
+						System.out.println("Error to rename file #" + i);
+					}
+				} catch(Exception e) {
+					continue;
+				}
+			} else if(s.equals("remove")) {
+				try {
+					int i = in.nextInt();
+					if ( delete(i) ) {
+						System.out.printf("File #%d has been deleted\n", i );
+					} else {
+						System.out.println("Error to delete file #" + i);
+					}
+				} catch(Exception e) {
+					continue;
+				}
+			} else if (s.equals("cd")) {
+				try {
+					int i = in.nextInt();
+					if ( cd(i) ) {
+						System.out.printf("now in folder: %s\n", currentPath.toString() );
+					} else {
+						System.out.println("Error to navigate folder #" + i);
+					}
+				} catch(Exception e) {
+					continue;
+				}
+			} else if (s.equals("open")) {
+				try {
+					int i = in.nextInt();
+					open(i);
+				} catch(Exception e) {
+					continue;
+				}
+			}
+ 			else if (s.equals("exit")) {
 				watcher.terminates();
 				System.exit(0);
 			}
 			else {
 				System.out.println("Unkown command " + s);
 			}
-			
 		}
 		
 	}
@@ -173,6 +227,9 @@ public class InteractiveControl {
 	}
 	
 	public static void main(String args[]) {
+		
+		
+		
 		InteractiveControl ic = new InteractiveControl("192.168.0.12", "/Users/cici/nfss", Paths.get("/Users/niezhenfei/kkk"));
 		ic.run();
 		

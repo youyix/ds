@@ -37,6 +37,7 @@ import client.nfs.ReadArgs;
 import client.nfs.ReadDirArgs;
 import client.nfs.ReadDirRes;
 import client.nfs.ReadRes;
+import client.nfs.RenameArgs;
 import client.nfs.SAttr;
 import client.nfs.Stat;
 import client.nfs.TimeVal;
@@ -348,6 +349,58 @@ public class NfsDir {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		return false;
+	}
+
+	public boolean rename(Path p, String fromFilename, String toFilename) {
+		client.nfs.FHandle fh = doo(Paths.get(p.toString()));
+		DirOpArgs from = new DirOpArgs();
+		from.dir = fh;
+		from.name = new FileName(fromFilename);
+
+		DirOpArgs to = new DirOpArgs();
+		to.dir = from.dir;
+		to.name = new FileName(toFilename);
+
+		RenameArgs ra = new RenameArgs();
+		ra.from = from;
+		ra.to = to;
+
+		int status = -1;
+		try {
+			status = nfsc.NFSPROC_RENAME_2(ra);
+		} catch (OncRpcException | IOException e) {
+			e.printStackTrace();
+		}
+		if ( status != Stat.NFS_OK ) {
+		    System.out.println("Not Fine " + status);
+		} else {
+		    System.out.println("Fine");
+			return true;
+		  
+		}
+		return false;
+	}
+
+	public boolean deleteFile(Path p, String filename) {
+		client.nfs.FHandle fh = doo(Paths.get(p.toString(), filename));
+		DirOpArgs doa = new DirOpArgs();
+		doa.dir = root;
+		doa.name = new FileName(filename);
+		  
+		int status = -1;
+		try {
+			status = nfsc.NFSPROC_REMOVE_2(doa);
+		} catch (OncRpcException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		if ( status != Stat.NFS_OK ) {
+//			System.out.println("3 Not Fine");
+		} else {
+		 	return true;
+		  
 		}
 		return false;
 	}

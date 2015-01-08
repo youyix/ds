@@ -21,8 +21,10 @@ import java.util.List;
  */
 public class Watcher extends Thread{
 	
+	private static NfsClientDelegate delegate = new NfsClientDelegate(Paths.get("/Users/niezhenfei/kkk"));
+	
 	public static void main(String[] args) throws IOException {
-		Watcher w = new Watcher(Paths.get("/Users/niezhenfei/kk"));
+		Watcher w = new Watcher(Paths.get("/Users/niezhenfei/kkk"));
 		w.start();
 	}
 	
@@ -104,7 +106,6 @@ public class Watcher extends Thread{
                     @SuppressWarnings("unchecked")
 					WatchEvent<Path> ev = (WatchEvent<Path>)event;
                     Path filename = ev.context();
-
                     System.out.println("Create: " + filename + " " + this.dir);
                     
                     File nf = dir.resolve(filename).toFile();
@@ -116,8 +117,11 @@ public class Watcher extends Thread{
 							e.printStackTrace();
 						}
         				wooos.add(w);
-        				
         				w.start();
+        				
+        				delegate.mkDir(dir, filename.toString());
+                    } else {
+                    	delegate.createFile(dir, filename.toString());
                     }
                 }
                 
@@ -127,6 +131,11 @@ public class Watcher extends Thread{
 					WatchEvent<Path> ev = (WatchEvent<Path>)event;
                     Path filename = ev.context();
                     System.out.println("M: " + filename);
+                    
+                    File nf = dir.resolve(filename).toFile();
+                    if ( ! nf.isDirectory() ) {
+                    	
+                    } 
                 }
                 
             }

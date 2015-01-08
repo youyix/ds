@@ -52,8 +52,8 @@ public class Main {
 	 * @throws OncRpcException 
 	 */
 	public static void main(String[] args) throws OncRpcException, IOException {
-		tryKO();
-//		try0();
+//		tryKO();
+		try0();
 	}
 	
 	public static void tryKO() throws OncRpcException, IOException {
@@ -146,7 +146,7 @@ public class Main {
 		  
 		  // get attr
 //		  attrstat as = nfsc.NFSPROC_GETATTR_2(root);
-//		  if ( as.status == stat.NFS_OK ) {
+//		  if ( as.status == Stat.NFS_OK ) {
 //			  System.out.printf("%d    %7o\n---\n", as.attributes.mode, as.attributes.mode);
 //		  } else {
 //			  System.out.println("CCC");
@@ -154,36 +154,36 @@ public class Main {
 //		  }
 		  
 		  // look up
-//		  diropargs dp = new diropargs();
-//		  dp.dir = root;
-//		  dp.name = new filename("ko.txt");
-//		  
-//		  diropres dr = nfsc.NFSPROC_LOOKUP_2(dp);
-//		  if ( dr.status != stat.NFS_OK ) {
-//			  System.out.println("Not Fine");
-//		  } else {
-//			  System.out.println("Fine");
-//			  client.nfs.fhandle f = dr.diropok.file;
-//			  fattr f_a = dr.diropok.attributes; 
-//			  System.out.println(f_a.size);
-//		  }
+		  DirOpArgs dp = new DirOpArgs();
+		  dp.dir = root;
+		  dp.name = new FileName("hhh");
+		  
+		  DirOpRes dr = nfsc.NFSPROC_LOOKUP_2(dp);
+		  if ( dr.status != Stat.NFS_OK ) {
+			  System.out.println("Not Fine");
+		  } else {
+			  System.out.println("Fine");
+			  client.nfs.FHandle f = dr.diropok.file;
+			  FAttr f_a = dr.diropok.attributes; 
+			  System.out.println(f_a.size);
+		  }
 		  
 		  
 		  //rename
 //		  diropargs from = new diropargs();
 //		  from.dir = root;
-//		  from.name = new filename("kkk");
+//		  from.name = new FileName("kkk");
 //		  
 //		  diropargs to = new diropargs();
 //		  to.dir = from.dir;
-//		  to.name = new filename("dirkkk");
+//		  to.name = new FileName("dirkkk");
 //		  
 //		  renameargs ra = new renameargs();
 //		  ra.from = from;
 //		  ra.to = to;
 //		  
 //		  int status = nfsc.NFSPROC_RENAME_2(ra);
-//		  if ( status != stat.NFS_OK ) {
+//		  if ( status != Stat.NFS_OK ) {
 //			  System.out.println("Not Fine");
 //		  } else {
 //			  System.out.println("Fine");
@@ -193,10 +193,10 @@ public class Main {
 		  
 //		  diropargs from = new diropargs();
 //		  from.dir = root;
-//		  from.name = new filename("emdir");
+//		  from.name = new FileName("emdir");
 //		  
 //		  int status = nfsc.NFSPROC_RMDIR_2(from);
-//		  if ( status != stat.NFS_OK ) {
+//		  if ( status != Stat.NFS_OK ) {
 //			  System.out.println("3 Not Fine");
 //		  } else {
 //			  System.out.println("3 Fine");
@@ -205,7 +205,7 @@ public class Main {
 		  //create new dir
 //		  diropargs where = new diropargs();
 //		  where.dir = root;
-//		  where.name = new filename("newc");
+//		  where.name = new FileName("newc");
 //		  
 //		  sattr sa = new sattr();
 //		  sa.atime = new timeval();
@@ -218,8 +218,8 @@ public class Main {
 //		  ca.where = where;
 //		  ca.attributes = sa;
 //		  
-//		  diropres dp = nfsc.NFSPROC_MKDIR_2(ca);
-//		  if ( dp.status != stat.NFS_OK ) {
+//		  DirOpRes dp = nfsc.NFSPROC_MKDIR_2(ca);
+//		  if ( dp.status != Stat.NFS_OK ) {
 //			  System.out.println("4 Not Fine");
 //		  } else {
 //			  System.out.println("4 Fine");
@@ -228,7 +228,7 @@ public class Main {
 		  //create file
 //		  diropargs where = new diropargs();
 //		  where.dir = root;
-//		  where.name = new filename("newfile.txt");
+//		  where.name = new FileName("newfile.txt");
 //		  
 //		  sattr sa = new sattr();
 //		  sa.atime = new timeval();
@@ -241,8 +241,8 @@ public class Main {
 //		  ca.where = where;
 //		  ca.attributes = sa;
 //		  
-//		  diropres dp = nfsc.NFSPROC_CREATE_2(ca);
-//		  if ( dp.status != stat.NFS_OK ) {
+//		  DirOpRes dp = nfsc.NFSPROC_CREATE_2(ca);
+//		  if ( dp.status != Stat.NFS_OK ) {
 //			  System.out.println("5 Not Fine " + dp.status);
 //		  } else {
 //			  System.out.println("5 Fine");
@@ -253,15 +253,15 @@ public class Main {
 //		  String fn = "newfile.txt";
 //		  diropargs dp = new diropargs();
 //		  dp.dir = root;
-//		  dp.name = new filename(fn);
+//		  dp.name = new FileName(fn);
 //		  
-//		  diropres dr = nfsc.NFSPROC_LOOKUP_2(dp);
-//		  if ( dr.status != stat.NFS_OK ) {
+//		  DirOpRes dr = nfsc.NFSPROC_LOOKUP_2(dp);
+//		  if ( dr.status != Stat.NFS_OK ) {
 //			  System.out.println("Not Fine");
 //		  } else {
 //			  System.out.println("Fine");
-//			  client.nfs.fhandle f = dr.diropok.file;
-//			  fattr f_a = dr.diropok.attributes; 
+//			  client.nfs.FHandle f = dr.diropok.file;
+//			  FAttr f_a = dr.diropok.attributes; 
 //			  System.out.println(f_a.size);
 //			  
 //			  //
@@ -271,11 +271,11 @@ public class Main {
 //			  ra.count = f_a.size;
 //			  
 //			  readres rr = nfsc.NFSPROC_READ_2(ra);
-//			  if ( rr.status != stat.NFS_OK ) {
+//			  if ( rr.status != Stat.NFS_OK ) {
 //				  System.out.println("6 Not Fine " + rr.status);
 //			  } else {
 //				  System.out.println("6 Fine");
-//				  fattr fa = rr.read.attributes;
+//				  FAttr fa = rr.read.attributes;
 //				  nfsdata data = rr.read.data;
 //				  FileOutputStream output = new FileOutputStream(new File(fn));
 //				  output.write(data.value);
@@ -286,15 +286,15 @@ public class Main {
 //		  String fn = "newfile.txt";
 //		  diropargs dp = new diropargs();
 //		  dp.dir = root;
-//		  dp.name = new filename(fn);
+//		  dp.name = new FileName(fn);
 //		  
-//		  diropres dr = nfsc.NFSPROC_LOOKUP_2(dp);
-//		  if ( dr.status != stat.NFS_OK ) {
+//		  DirOpRes dr = nfsc.NFSPROC_LOOKUP_2(dp);
+//		  if ( dr.status != Stat.NFS_OK ) {
 //			  System.out.println("Not Fine");
 //		  } else {
 //			  System.out.println("Fine");
-//			  client.nfs.fhandle f = dr.diropok.file;
-//			  fattr f_a = dr.diropok.attributes; 
+//			  client.nfs.FHandle f = dr.diropok.file;
+//			  FAttr f_a = dr.diropok.attributes; 
 //			  //
 //			  String s = "hello ghouan!\ndasdasdasd\nasdasd\ts\nddsjglj\nasdsdsfad";
 //			  byte[] dd = s.getBytes();
@@ -305,7 +305,7 @@ public class Main {
 //			  wa.data = new nfsdata(dd);
 //			  
 //			  attrstat as = nfsc.NFSPROC_WRITE_2(wa);
-//			  if ( as.status != stat.NFS_OK ) {
+//			  if ( as.status != Stat.NFS_OK ) {
 //				  System.out.println("7 Not Fine " + as.status);
 //			  } else {
 //				  System.out.println("7 Fine");

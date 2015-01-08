@@ -19,6 +19,7 @@ import org.acplt.oncrpc.OncRpcClientAuthUnix;
 import org.acplt.oncrpc.OncRpcException;
 import org.acplt.oncrpc.OncRpcProtocols;
 
+import client.encryption.Encryption;
 import client.mount.DirPath;
 import client.mount.FHStatus;
 import client.mount.MountClient;
@@ -174,9 +175,9 @@ public class NfsDir {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-		    System.out.println("3 Not Fine " + dp.status);
+//		    System.out.println("3 Not Fine " + dp.status);
 		} else {
-		    System.out.println("3 Fine");
+//		    System.out.println("3 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -230,6 +231,7 @@ public class NfsDir {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		fileArray = Encryption.getInstance().encrypt(fileArray);
 		
 		
 		DirOpRes res =  lookup(fh, filename);
@@ -252,9 +254,10 @@ public class NfsDir {
 			e.printStackTrace();
 		}
 	    if ( as.status != Stat.NFS_OK ) {
-	       System.out.println("7 Not Fine " + as.status);
+//	       System.out.println("7 Not Fine " + as.status);
 	    } else {
-	       System.out.println("7 Fine");
+//	       System.out.println("7 Fine");
+	    	flag = true;
 	    }
 		return flag;
 	}
@@ -343,7 +346,8 @@ public class NfsDir {
 //				System.out.println("6 Fine");
 				NfsData data = rr.read.data;
 				FileOutputStream output = new FileOutputStream(Utils.convertPath(p, downloadDir, filename).toString());
-				output.write(data.value);
+				byte[] fileData = Encryption.getInstance().decrypt(data.value);
+				output.write(fileData);
 				output.close();
 				return true;
 			} catch (IOException e) {

@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
+import client.encryption.KeyOperator;
 import client.watcher.Watcher;
 
 
@@ -119,6 +120,7 @@ public class InteractiveControl {
 	public void run() {
 		System.out.println(host + ":" + remoteDir + " has mounted.");
 		System.out.println(commands());
+		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
 		String s = "";
 		while((s = in.next()) != null) {
@@ -215,7 +217,9 @@ public class InteractiveControl {
 			}
 			else {
 				System.out.println("Unkown command " + s);
+				in.reset();
 			}
+			System.out.print("> ");
 		}
 		
 	}
@@ -238,17 +242,20 @@ public class InteractiveControl {
 	}
 	
 	public static void main(String args[]) {
-		if ( args.length != 3 && args.length != 1 ) {
+		if ( args.length == -1  ) {
 			System.out.println(usage());
 			System.exit(0);
 		}
+		
+		int hop = parseOption(args, 0);
+		
 		String host = "";
 		String remoteDir = "";
 		String localDir = "";
 		try {
-			host = args[0];
-			remoteDir = args[1];
-			localDir = args[2];
+			host = args[0 + hop];
+			remoteDir = args[1 + hop];
+			localDir = args[2 + hop];
 		} catch(Exception e) {
 //			System.out.println(usage());
 //			System.exit(0);
@@ -262,9 +269,29 @@ public class InteractiveControl {
 		
 	}
 	
+	public static int parseOption(String args[], int h) {
+		if ( args[h].equals("-i") ) {
+			String keyfile = args[h + 1];
+			KeyOperator.importKey(Paths.get(keyfile));
+			System.out.println("Key file imported.");
+			h = h+2;
+		} else if (args[h].equals("-e") ) {
+			String password = args[h+1];
+			KeyOperator.exportKey(password);
+			System.out.println("Key file exported.");
+			System.exit(0);
+		}
+		return h;
+	}
+	
 	public static String usage() {
-		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl parameters\n";
-		str += "paramters: \n";
+		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl options parameters\n";
+		String option = "Options\n-i keyfileath: import key file\n";
+		String option2 = "-e password: export key file\n";
+		
+		str += option;
+		str += option2;
+		str += "Paramters: \n";
 		str += "server_ip shared_folder_path loca_folder_path\n";
 		return str;
 	}

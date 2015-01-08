@@ -12,6 +12,7 @@ import org.acplt.oncrpc.OncRpcClientAuthUnix;
 import org.acplt.oncrpc.OncRpcException;
 import org.acplt.oncrpc.OncRpcProtocols;
 
+import client.encryption.Encryption;
 import client.mount.DirPath;
 import client.mount.FHStatus;
 import client.mount.MountClient;
@@ -66,7 +67,6 @@ public class NfsClientDelegate {
 		}
 		
 		if ( fh.status != 0 ) {
-//			System.out.println("ZZZZZZZ " + fh.status);
 			System.exit(0);
 		} else {
 		  byte[] hh = fh.directory.value;
@@ -74,7 +74,6 @@ public class NfsClientDelegate {
 		  nfsc = new NfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
 		  nfsc.getClient().setAuth(auth);
 		}
-//		System.out.println("Mount !!");
 	}
 	
 	public client.nfs.FHandle doo(Path p, String filename) { 
@@ -106,12 +105,7 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dr.status != Stat.NFS_OK ) {
-//			System.out.println("Not Fine");
 		} else {
-//			System.out.println("Fine");
-//			client.nfs.FHandle f = dr.diropok.file;
-//			FAttr f_a = dr.diropok.attributes; 
-//			System.out.println(f_a.size);
 			return dr;
 		}
 		return null;
@@ -147,9 +141,7 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-//		    System.out.println("3 Not Fine " + dp.status);
 		} else {
-//		    System.out.println("3 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -184,9 +176,7 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-//		    System.out.println("4 Not Fine " + dp.status);
 		} else {
-//		    System.out.println("4 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -203,7 +193,7 @@ public class NfsClientDelegate {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		fileArray = Encryption.getInstance().encrypt(fileArray);
 		
 		DirOpRes res = lookup(fh, filename);
 		if (res == null) {
@@ -231,6 +221,7 @@ public class NfsClientDelegate {
 //	       System.out.println("7 Not Fine " + as.status);
 	    } else {
 //	       System.out.println("7 Fine");
+	    	flag = true;
 	    }
 		return flag;
 	}

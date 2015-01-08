@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class readdirres implements XdrAble {
+public class ReadDirRes implements XdrAble {
     public int status;
-    public readdirresOK readdirok;
+    public ReadDirResOK readdirok;
 
-    public readdirres() {
+    public ReadDirRes() {
     }
 
-    public readdirres(XdrDecodingStream xdr)
+    public ReadDirRes(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -23,7 +23,7 @@ public class readdirres implements XdrAble {
            throws OncRpcException, IOException {
         xdr.xdrEncodeInt(status);
         switch ( status ) {
-        case stat.NFS_OK:
+        case Stat.NFS_OK:
             readdirok.xdrEncode(xdr);
             break;
         default:
@@ -35,8 +35,8 @@ public class readdirres implements XdrAble {
            throws OncRpcException, IOException {
         status = xdr.xdrDecodeInt();
         switch ( status ) {
-        case stat.NFS_OK:
-            readdirok = new readdirresOK(xdr);
+        case Stat.NFS_OK:
+            readdirok = new ReadDirResOK(xdr);
             break;
         default:
             break;

@@ -7,17 +7,17 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class statfsresOK implements XdrAble {
+public class StatFsResOK implements XdrAble {
     public int tsize;
     public int bsize;
     public int blocks;
     public int bfree;
     public int bavail;
 
-    public statfsresOK() {
+    public StatFsResOK() {
     }
 
-    public statfsresOK(XdrDecodingStream xdr)
+    public StatFsResOK(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }

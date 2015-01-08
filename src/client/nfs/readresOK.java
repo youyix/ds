@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class readresOK implements XdrAble {
-    public fattr attributes;
-    public nfsdata data;
+public class ReadResOK implements XdrAble {
+    public FAttr attributes;
+    public NfsData data;
 
-    public readresOK() {
+    public ReadResOK() {
     }
 
-    public readresOK(XdrDecodingStream xdr)
+    public ReadResOK(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class readresOK implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        attributes = new fattr(xdr);
-        data = new nfsdata(xdr);
+        attributes = new FAttr(xdr);
+        data = new NfsData(xdr);
     }
 
 }

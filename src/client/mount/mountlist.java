@@ -7,15 +7,15 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class mountlist implements XdrAble {
-    public name hostname;
-    public dirpath directory;
-    public mountlist nextentry;
+public class MountList implements XdrAble {
+    public Name hostname;
+    public DirPath directory;
+    public MountList nextentry;
 
-    public mountlist() {
+    public MountList() {
     }
 
-    public mountlist(XdrDecodingStream xdr)
+    public MountList(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -29,9 +29,9 @@ public class mountlist implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        hostname = new name(xdr);
-        directory = new dirpath(xdr);
-        nextentry = new mountlist(xdr);
+        hostname = new Name(xdr);
+        directory = new DirPath(xdr);
+        nextentry = new MountList(xdr);
     }
 
 }

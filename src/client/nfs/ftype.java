@@ -7,7 +7,7 @@ package client.nfs;
 /**
  * Enumeration (collection of constants).
  */
-public interface ftype {
+public interface FType {
 
     public static final int NFNON = 0;
     public static final int NFREG = 1;

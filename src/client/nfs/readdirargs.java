@@ -7,15 +7,15 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class readdirargs implements XdrAble {
-    public fhandle dir;
-    public nfscookie cookie;
+public class ReadDirArgs implements XdrAble {
+    public FHandle dir;
+    public NfsCookie cookie;
     public int count;
 
-    public readdirargs() {
+    public ReadDirArgs() {
     }
 
-    public readdirargs(XdrDecodingStream xdr)
+    public ReadDirArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -29,8 +29,8 @@ public class readdirargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        dir = new fhandle(xdr);
-        cookie = new nfscookie(xdr);
+        dir = new FHandle(xdr);
+        cookie = new NfsCookie(xdr);
         count = xdr.xdrDecodeInt();
     }
 

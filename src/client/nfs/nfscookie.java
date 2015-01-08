@@ -7,30 +7,30 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class nfscookie implements XdrAble {
+public class NfsCookie implements XdrAble {
 
     public byte [] value;
 
-    public nfscookie() {
+    public NfsCookie() {
     }
 
-    public nfscookie(byte [] value) {
+    public NfsCookie(byte [] value) {
         this.value = value;
     }
 
-    public nfscookie(XdrDecodingStream xdr)
+    public NfsCookie(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
 
     public void xdrEncode(XdrEncodingStream xdr)
            throws OncRpcException, IOException {
-        xdr.xdrEncodeOpaque(value, nfs.COOKIESIZE);
+        xdr.xdrEncodeOpaque(value, Nfs.COOKIESIZE);
     }
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        value = xdr.xdrDecodeOpaque(nfs.COOKIESIZE);
+        value = xdr.xdrDecodeOpaque(Nfs.COOKIESIZE);
     }
 
 }

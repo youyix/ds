@@ -7,30 +7,30 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class fhandle implements XdrAble {
+public class FHandle implements XdrAble {
 
     public byte [] value;
 
-    public fhandle() {
+    public FHandle() {
     }
 
-    public fhandle(byte [] value) {
+    public FHandle(byte [] value) {
         this.value = value;
     }
 
-    public fhandle(XdrDecodingStream xdr)
+    public FHandle(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
 
     public void xdrEncode(XdrEncodingStream xdr)
            throws OncRpcException, IOException {
-        xdr.xdrEncodeOpaque(value, mount.FHSIZE);
+        xdr.xdrEncodeOpaque(value, Mount.FHSIZE);
     }
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        value = xdr.xdrDecodeOpaque(mount.FHSIZE);
+        value = xdr.xdrDecodeOpaque(Mount.FHSIZE);
     }
 
 }

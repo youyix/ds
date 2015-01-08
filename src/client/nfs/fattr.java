@@ -7,7 +7,7 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class fattr implements XdrAble {
+public class FAttr implements XdrAble {
     public int type;
     public int mode;
     public int nlink;
@@ -19,14 +19,14 @@ public class fattr implements XdrAble {
     public int blocks;
     public int fsid;
     public int fileid;
-    public timeval atime;
-    public timeval mtime;
-    public timeval ctime;
+    public TimeVal atime;
+    public TimeVal mtime;
+    public TimeVal ctime;
 
-    public fattr() {
+    public FAttr() {
     }
 
-    public fattr(XdrDecodingStream xdr)
+    public FAttr(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -62,9 +62,9 @@ public class fattr implements XdrAble {
         blocks = xdr.xdrDecodeInt();
         fsid = xdr.xdrDecodeInt();
         fileid = xdr.xdrDecodeInt();
-        atime = new timeval(xdr);
-        mtime = new timeval(xdr);
-        ctime = new timeval(xdr);
+        atime = new TimeVal(xdr);
+        mtime = new TimeVal(xdr);
+        ctime = new TimeVal(xdr);
     }
 
 }

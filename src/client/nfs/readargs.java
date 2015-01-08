@@ -7,16 +7,16 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class readargs implements XdrAble {
-    public fhandle file;
+public class ReadArgs implements XdrAble {
+    public FHandle file;
     public int offset;
     public int count;
     public int totalcount;
 
-    public readargs() {
+    public ReadArgs() {
     }
 
-    public readargs(XdrDecodingStream xdr)
+    public ReadArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -31,7 +31,7 @@ public class readargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        file = new fhandle(xdr);
+        file = new FHandle(xdr);
         offset = xdr.xdrDecodeInt();
         count = xdr.xdrDecodeInt();
         totalcount = xdr.xdrDecodeInt();

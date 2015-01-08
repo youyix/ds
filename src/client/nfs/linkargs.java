@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class linkargs implements XdrAble {
-    public fhandle from;
-    public diropargs to;
+public class LinkArgs implements XdrAble {
+    public FHandle from;
+    public DirOpArgs to;
 
-    public linkargs() {
+    public LinkArgs() {
     }
 
-    public linkargs(XdrDecodingStream xdr)
+    public LinkArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class linkargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        from = new fhandle(xdr);
-        to = new diropargs(xdr);
+        from = new FHandle(xdr);
+        to = new DirOpArgs(xdr);
     }
 
 }

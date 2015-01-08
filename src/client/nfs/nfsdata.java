@@ -7,18 +7,18 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class nfsdata implements XdrAble {
+public class NfsData implements XdrAble {
 
     public byte [] value;
 
-    public nfsdata() {
+    public NfsData() {
     }
 
-    public nfsdata(byte [] value) {
+    public NfsData(byte [] value) {
         this.value = value;
     }
 
-    public nfsdata(XdrDecodingStream xdr)
+    public NfsData(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }

@@ -14,7 +14,7 @@ import java.net.InetAddress;
  * for the NFS_PROGRAM remote program. It provides method stubs
  * which, when called, in turn call the appropriate remote method (procedure).
  */
-public class nfsClient extends OncRpcClientStub {
+public class NfsClient extends OncRpcClientStub {
 
     /**
      * Constructs a <code>nfsClient</code> client stub proxy object
@@ -25,9 +25,9 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public nfsClient(InetAddress host, int protocol)
+    public NfsClient(InetAddress host, int protocol)
            throws OncRpcException, IOException {
-        super(host, nfs.NFS_PROGRAM, 2, 0, protocol);
+        super(host, Nfs.NFS_PROGRAM, 2, 0, protocol);
     }
 
     /**
@@ -40,9 +40,9 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public nfsClient(InetAddress host, int port, int protocol)
+    public NfsClient(InetAddress host, int port, int protocol)
            throws OncRpcException, IOException {
-        super(host, nfs.NFS_PROGRAM, 2, port, protocol);
+        super(host, Nfs.NFS_PROGRAM, 2, port, protocol);
     }
 
     /**
@@ -53,7 +53,7 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public nfsClient(OncRpcClient client)
+    public NfsClient(OncRpcClient client)
            throws OncRpcException, IOException {
         super(client);
     }
@@ -69,7 +69,7 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public nfsClient(InetAddress host, int program, int version, int protocol)
+    public NfsClient(InetAddress host, int program, int version, int protocol)
            throws OncRpcException, IOException {
         super(host, program, version, 0, protocol);
     }
@@ -86,7 +86,7 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public nfsClient(InetAddress host, int program, int version, int port, int protocol)
+    public NfsClient(InetAddress host, int program, int version, int port, int protocol)
            throws OncRpcException, IOException {
         super(host, program, version, port, protocol);
     }
@@ -100,7 +100,7 @@ public class nfsClient extends OncRpcClientStub {
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(nfs.NFSPROC_NULL_2, nfs.NFS_VERSION, args$, result$);
+        client.call(Nfs.NFSPROC_NULL_2, Nfs.NFS_VERSION, args$, result$);
     }
 
     /**
@@ -110,10 +110,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public attrstat NFSPROC_GETATTR_2(fhandle arg1)
+    public AttrStat NFSPROC_GETATTR_2(FHandle arg1)
            throws OncRpcException, IOException {
-        attrstat result$ = new attrstat();
-        client.call(nfs.NFSPROC_GETATTR_2, nfs.NFS_VERSION, arg1, result$);
+        AttrStat result$ = new AttrStat();
+        client.call(Nfs.NFSPROC_GETATTR_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -124,10 +124,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public attrstat NFSPROC_SETATTR_2(sattrargs arg1)
+    public AttrStat NFSPROC_SETATTR_2(SAttrArgs arg1)
            throws OncRpcException, IOException {
-        attrstat result$ = new attrstat();
-        client.call(nfs.NFSPROC_SETATTR_2, nfs.NFS_VERSION, arg1, result$);
+        AttrStat result$ = new AttrStat();
+        client.call(Nfs.NFSPROC_SETATTR_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -140,7 +140,7 @@ public class nfsClient extends OncRpcClientStub {
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(nfs.NFSPROC_ROOT_2, nfs.NFS_VERSION, args$, result$);
+        client.call(Nfs.NFSPROC_ROOT_2, Nfs.NFS_VERSION, args$, result$);
     }
 
     /**
@@ -150,10 +150,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public diropres NFSPROC_LOOKUP_2(diropargs arg1)
+    public DirOpRes NFSPROC_LOOKUP_2(DirOpArgs arg1)
            throws OncRpcException, IOException {
-        diropres result$ = new diropres();
-        client.call(nfs.NFSPROC_LOOKUP_2, nfs.NFS_VERSION, arg1, result$);
+        DirOpRes result$ = new DirOpRes();
+        client.call(Nfs.NFSPROC_LOOKUP_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -164,10 +164,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public readlinkres NFSPROC_READLINK_2(fhandle arg1)
+    public ReadLinkRes NFSPROC_READLINK_2(FHandle arg1)
            throws OncRpcException, IOException {
-        readlinkres result$ = new readlinkres();
-        client.call(nfs.NFSPROC_READLINK_2, nfs.NFS_VERSION, arg1, result$);
+        ReadLinkRes result$ = new ReadLinkRes();
+        client.call(Nfs.NFSPROC_READLINK_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -178,10 +178,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public readres NFSPROC_READ_2(readargs arg1)
+    public ReadRes NFSPROC_READ_2(ReadArgs arg1)
            throws OncRpcException, IOException {
-        readres result$ = new readres();
-        client.call(nfs.NFSPROC_READ_2, nfs.NFS_VERSION, arg1, result$);
+        ReadRes result$ = new ReadRes();
+        client.call(Nfs.NFSPROC_READ_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -194,7 +194,7 @@ public class nfsClient extends OncRpcClientStub {
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(nfs.NFSPROC_WRITECACHE_2, nfs.NFS_VERSION, args$, result$);
+        client.call(Nfs.NFSPROC_WRITECACHE_2, Nfs.NFS_VERSION, args$, result$);
     }
 
     /**
@@ -204,10 +204,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public attrstat NFSPROC_WRITE_2(writeargs arg1)
+    public AttrStat NFSPROC_WRITE_2(WriteArgs arg1)
            throws OncRpcException, IOException {
-        attrstat result$ = new attrstat();
-        client.call(nfs.NFSPROC_WRITE_2, nfs.NFS_VERSION, arg1, result$);
+        AttrStat result$ = new AttrStat();
+        client.call(Nfs.NFSPROC_WRITE_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -218,10 +218,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public diropres NFSPROC_CREATE_2(createargs arg1)
+    public DirOpRes NFSPROC_CREATE_2(CreateArgs arg1)
            throws OncRpcException, IOException {
-        diropres result$ = new diropres();
-        client.call(nfs.NFSPROC_CREATE_2, nfs.NFS_VERSION, arg1, result$);
+        DirOpRes result$ = new DirOpRes();
+        client.call(Nfs.NFSPROC_CREATE_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -232,10 +232,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public int NFSPROC_REMOVE_2(diropargs arg1)
+    public int NFSPROC_REMOVE_2(DirOpArgs arg1)
            throws OncRpcException, IOException {
         XdrInt result$ = new XdrInt();
-        client.call(nfs.NFSPROC_REMOVE_2, nfs.NFS_VERSION, arg1, result$);
+        client.call(Nfs.NFSPROC_REMOVE_2, Nfs.NFS_VERSION, arg1, result$);
         return result$.intValue();
     }
 
@@ -246,10 +246,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public int NFSPROC_RENAME_2(renameargs arg1)
+    public int NFSPROC_RENAME_2(RenameArgs arg1)
            throws OncRpcException, IOException {
         XdrInt result$ = new XdrInt();
-        client.call(nfs.NFSPROC_RENAME_2, nfs.NFS_VERSION, arg1, result$);
+        client.call(Nfs.NFSPROC_RENAME_2, Nfs.NFS_VERSION, arg1, result$);
         return result$.intValue();
     }
 
@@ -260,10 +260,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public int NFSPROC_LINK_2(linkargs arg1)
+    public int NFSPROC_LINK_2(LinkArgs arg1)
            throws OncRpcException, IOException {
         XdrInt result$ = new XdrInt();
-        client.call(nfs.NFSPROC_LINK_2, nfs.NFS_VERSION, arg1, result$);
+        client.call(Nfs.NFSPROC_LINK_2, Nfs.NFS_VERSION, arg1, result$);
         return result$.intValue();
     }
 
@@ -274,10 +274,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public int NFSPROC_SYMLINK_2(symlinkargs arg1)
+    public int NFSPROC_SYMLINK_2(SymlinkArgs arg1)
            throws OncRpcException, IOException {
         XdrInt result$ = new XdrInt();
-        client.call(nfs.NFSPROC_SYMLINK_2, nfs.NFS_VERSION, arg1, result$);
+        client.call(Nfs.NFSPROC_SYMLINK_2, Nfs.NFS_VERSION, arg1, result$);
         return result$.intValue();
     }
 
@@ -288,10 +288,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public diropres NFSPROC_MKDIR_2(createargs arg1)
+    public DirOpRes NFSPROC_MKDIR_2(CreateArgs arg1)
            throws OncRpcException, IOException {
-        diropres result$ = new diropres();
-        client.call(nfs.NFSPROC_MKDIR_2, nfs.NFS_VERSION, arg1, result$);
+        DirOpRes result$ = new DirOpRes();
+        client.call(Nfs.NFSPROC_MKDIR_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -302,10 +302,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public int NFSPROC_RMDIR_2(diropargs arg1)
+    public int NFSPROC_RMDIR_2(DirOpArgs arg1)
            throws OncRpcException, IOException {
         XdrInt result$ = new XdrInt();
-        client.call(nfs.NFSPROC_RMDIR_2, nfs.NFS_VERSION, arg1, result$);
+        client.call(Nfs.NFSPROC_RMDIR_2, Nfs.NFS_VERSION, arg1, result$);
         return result$.intValue();
     }
 
@@ -316,10 +316,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public readdirres NFSPROC_READDIR_2(readdirargs arg1)
+    public ReadDirRes NFSPROC_READDIR_2(ReadDirArgs arg1)
            throws OncRpcException, IOException {
-        readdirres result$ = new readdirres();
-        client.call(nfs.NFSPROC_READDIR_2, nfs.NFS_VERSION, arg1, result$);
+        ReadDirRes result$ = new ReadDirRes();
+        client.call(Nfs.NFSPROC_READDIR_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 
@@ -330,10 +330,10 @@ public class nfsClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public statfsres NFSPROC_STATFS_2(fhandle arg1)
+    public StatFsRes NFSPROC_STATFS_2(FHandle arg1)
            throws OncRpcException, IOException {
-        statfsres result$ = new statfsres();
-        client.call(nfs.NFSPROC_STATFS_2, nfs.NFS_VERSION, arg1, result$);
+        StatFsRes result$ = new StatFsRes();
+        client.call(Nfs.NFSPROC_STATFS_2, Nfs.NFS_VERSION, arg1, result$);
         return result$;
     }
 

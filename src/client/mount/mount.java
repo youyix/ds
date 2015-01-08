@@ -7,7 +7,7 @@ package client.mount;
 /**
  * A collection of constants used by the "mount" ONC/RPC program.
  */
-public interface mount {
+public interface Mount {
     public static final int MOUNTPROC_UMNT_1 = 3;
     public static final int FHSIZE = 32;
     public static final int MOUNTPROC_MNT_1 = 1;

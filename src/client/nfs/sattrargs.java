@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class sattrargs implements XdrAble {
-    public fhandle file;
-    public sattr attributes;
+public class SAttrArgs implements XdrAble {
+    public FHandle file;
+    public SAttr attributes;
 
-    public sattrargs() {
+    public SAttrArgs() {
     }
 
-    public sattrargs(XdrDecodingStream xdr)
+    public SAttrArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class sattrargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        file = new fhandle(xdr);
-        attributes = new sattr(xdr);
+        file = new FHandle(xdr);
+        attributes = new SAttr(xdr);
     }
 
 }

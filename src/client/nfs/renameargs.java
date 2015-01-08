@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class renameargs implements XdrAble {
-    public diropargs from;
-    public diropargs to;
+public class RenameArgs implements XdrAble {
+    public DirOpArgs from;
+    public DirOpArgs to;
 
-    public renameargs() {
+    public RenameArgs() {
     }
 
-    public renameargs(XdrDecodingStream xdr)
+    public RenameArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class renameargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        from = new diropargs(xdr);
-        to = new diropargs(xdr);
+        from = new DirOpArgs(xdr);
+        to = new DirOpArgs(xdr);
     }
 
 }

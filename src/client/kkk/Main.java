@@ -17,32 +17,32 @@ import org.acplt.oncrpc.XdrVoid;
 import sun.misc.IOUtils;
 
 //import client.mount.mountClient;
-import client.mount.fhstatus;
-import client.mount.mountClient;
-import client.mount.mount;
-import client.mount.dirpath;
+import client.mount.FHStatus;
+import client.mount.MountClient;
+import client.mount.Mount;
+import client.mount.DirPath;
 
-import client.nfs.attrstat;
-import client.nfs.createargs;
-import client.nfs.diropargs;
-import client.nfs.diropres;
-import client.nfs.entry;
-import client.nfs.fattr;
-import client.nfs.filename;
-import client.nfs.nfs;
-import client.nfs.nfsClient;
-import client.nfs.nfscookie;
-import client.nfs.nfsdata;
-import client.nfs.readargs;
-import client.nfs.readdirargs;
-import client.nfs.readdirres;
-import client.nfs.readres;
-import client.nfs.renameargs;
-import client.nfs.sattr;
-import client.nfs.sattrargs;
-import client.nfs.stat;
-import client.nfs.timeval;
-import client.nfs.writeargs;
+import client.nfs.AttrStat;
+import client.nfs.CreateArgs;
+import client.nfs.DirOpArgs;
+import client.nfs.DirOpRes;
+import client.nfs.Entry;
+import client.nfs.FAttr;
+import client.nfs.FileName;
+import client.nfs.Nfs;
+import client.nfs.NfsClient;
+import client.nfs.NfsCookie;
+import client.nfs.NfsData;
+import client.nfs.ReadArgs;
+import client.nfs.ReadDirArgs;
+import client.nfs.ReadDirRes;
+import client.nfs.ReadRes;
+import client.nfs.RenameArgs;
+import client.nfs.SAttr;
+import client.nfs.SAttrArgs;
+import client.nfs.Stat;
+import client.nfs.TimeVal;
+import client.nfs.WriteArgs;
 
 public class Main {
 
@@ -58,15 +58,15 @@ public class Main {
 	
 	public static void tryKO() throws OncRpcException, IOException {
 		InetAddress ia = InetAddress.getByName("192.168.0.12");
-		mountClient mnt = new mountClient(ia,OncRpcProtocols.ONCRPC_UDP);
+		MountClient mnt = new MountClient(ia,OncRpcProtocols.ONCRPC_UDP);
 		
 		OncRpcClientAuth auth = new OncRpcClientAuthUnix("zhenfeinie",501,20);
 		mnt.getClient().setAuth(auth);
 		
 		String mntPoint = "/Users/cici/nfss/";
-		fhstatus fh = null;
+		FHStatus fh = null;
 		try {
-			fh = mnt.MOUNTPROC_MNT_1(new dirpath(mntPoint));
+			fh = mnt.MOUNTPROC_MNT_1(new DirPath(mntPoint));
 		} catch (OncRpcAuthenticationException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -77,27 +77,27 @@ public class Main {
 			System.exit(0);
 		} else {
 		  byte[] hh = fh.directory.value;
-		  client.nfs.fhandle root = new client.nfs.fhandle(hh);
-		  nfsClient nfsc = new nfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
+		  client.nfs.FHandle root = new client.nfs.FHandle(hh);
+		  NfsClient nfsc = new NfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
 		  nfsc.getClient().setAuth(auth);
 		  System.out.println("YY " + nfsc.toString());
 		  
-		  readdirargs rda = new readdirargs();
+		  ReadDirArgs rda = new ReadDirArgs();
 		  rda.dir = root;
-		  byte b[] = new byte[nfs.COOKIESIZE];
-		  rda.cookie = new nfscookie(b);
-		  rda.count = 100000;
+		  byte b[] = new byte[Nfs.COOKIESIZE];
+		  rda.cookie = new NfsCookie(b);
+		  rda.count = 10000;
 		  
-		  readdirres rdr = new readdirres();
+		  ReadDirRes rdr = new ReadDirRes();
 		  rdr = nfsc.NFSPROC_READDIR_2(rda);
 		  
-		  if ( rdr.status != stat.NFS_OK ) {
+		  if ( rdr.status != Stat.NFS_OK ) {
 			  System.out.println("NNN " + rdr.status);
 			  System.exit(0);
 		  } else {
-			  entry entries = rdr.readdirok.entries;
+			  Entry entries = rdr.readdirok.entries;
 			  System.out.println("VV " + rdr.readdirok.eof);
-			  entry e = entries;
+			  Entry e = entries;
 			  if ( rdr.readdirok.entries != null ) {
 				  do { 
 					  System.out.println(e.name.value);
@@ -108,7 +108,7 @@ public class Main {
 					  }
 				  } while (e != null);
 			  } else {
-				  System.out.println("EMPTY??");
+				  System.out.println("EMPTY Dir or the `count` is too small");
 			  }
 		  }
 		}
@@ -118,15 +118,15 @@ public class Main {
 	
 	public static void try0() throws OncRpcException, IOException {
 		InetAddress ia = InetAddress.getByName("192.168.0.12");
-		mountClient mnt = new mountClient(ia,OncRpcProtocols.ONCRPC_UDP);
+		MountClient mnt = new MountClient(ia,OncRpcProtocols.ONCRPC_UDP);
 		
 		OncRpcClientAuth auth = new OncRpcClientAuthUnix("zhenfeinie",501,20);
 		mnt.getClient().setAuth(auth);
 		
 		String mntPoint = "/Users/cici/nfss/";
-		fhstatus fh = null;
+		FHStatus fh = null;
 		try {
-			fh = mnt.MOUNTPROC_MNT_1(new dirpath(mntPoint));
+			fh = mnt.MOUNTPROC_MNT_1(new DirPath(mntPoint));
 		} catch (OncRpcAuthenticationException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -137,8 +137,8 @@ public class Main {
 			System.exit(0);
 		} else {
 		  byte[] hh = fh.directory.value;
-		  client.nfs.fhandle root = new client.nfs.fhandle(hh);
-		  nfsClient nfsc = new nfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
+		  client.nfs.FHandle root = new client.nfs.FHandle(hh);
+		  NfsClient nfsc = new NfsClient(ia, OncRpcProtocols.ONCRPC_UDP);
 		  nfsc.getClient().setAuth(auth);
 		  System.out.println("YY " + nfsc.toString());
 		  

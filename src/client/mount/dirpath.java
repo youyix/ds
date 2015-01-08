@@ -7,18 +7,18 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class dirpath implements XdrAble {
+public class DirPath implements XdrAble {
 
     public String value;
 
-    public dirpath() {
+    public DirPath() {
     }
 
-    public dirpath(String value) {
+    public DirPath(String value) {
         this.value = value;
     }
 
-    public dirpath(XdrDecodingStream xdr)
+    public DirPath(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }

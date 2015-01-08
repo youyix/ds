@@ -7,15 +7,15 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class symlinkargs implements XdrAble {
-    public diropargs from;
-    public path to;
-    public sattr attributes;
+public class SymlinkArgs implements XdrAble {
+    public DirOpArgs from;
+    public Path to;
+    public SAttr attributes;
 
-    public symlinkargs() {
+    public SymlinkArgs() {
     }
 
-    public symlinkargs(XdrDecodingStream xdr)
+    public SymlinkArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -29,9 +29,9 @@ public class symlinkargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        from = new diropargs(xdr);
-        to = new path(xdr);
-        attributes = new sattr(xdr);
+        from = new DirOpArgs(xdr);
+        to = new Path(xdr);
+        attributes = new SAttr(xdr);
     }
 
 }

@@ -7,23 +7,23 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class entry implements XdrAble {
+public class Entry implements XdrAble {
     public int fileid;
-    public filename name;
-    public nfscookie cookie;
-    public entry nextentry;
+    public FileName name;
+    public NfsCookie cookie;
+    public Entry nextentry;
 
-    public entry() {
+    public Entry() {
     }
 
-    public entry(XdrDecodingStream xdr)
+    public Entry(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
 
     public void xdrEncode(XdrEncodingStream xdr)
            throws OncRpcException, IOException {
-        entry $this = this;
+        Entry $this = this;
         do {
             xdr.xdrEncodeInt($this.fileid);
             $this.name.xdrEncode(xdr);
@@ -35,13 +35,13 @@ public class entry implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        entry $this = this;
-        entry $next;
+        Entry $this = this;
+        Entry $next;
         do {
             $this.fileid = xdr.xdrDecodeInt();
-            $this.name = new filename(xdr);
-            $this.cookie = new nfscookie(xdr);
-            $next = xdr.xdrDecodeBoolean() ? new entry() : null;
+            $this.name = new FileName(xdr);
+            $this.cookie = new NfsCookie(xdr);
+            $next = xdr.xdrDecodeBoolean() ? new Entry() : null;
             $this.nextentry = $next;
             $this = $next;
         } while ( $this != null );

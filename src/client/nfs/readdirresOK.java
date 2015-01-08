@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class readdirresOK implements XdrAble {
-    public entry entries;
+public class ReadDirResOK implements XdrAble {
+    public Entry entries;
     public boolean eof;
 
-    public readdirresOK() {
+    public ReadDirResOK() {
     }
 
-    public readdirresOK(XdrDecodingStream xdr)
+    public ReadDirResOK(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,7 +27,7 @@ public class readdirresOK implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        entries = xdr.xdrDecodeBoolean() ? new entry(xdr) : null;
+        entries = xdr.xdrDecodeBoolean() ? new Entry(xdr) : null;
         eof = xdr.xdrDecodeBoolean();
     }
 

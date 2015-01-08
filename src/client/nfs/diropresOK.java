@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class diropresOK implements XdrAble {
-    public fhandle file;
-    public fattr attributes;
+public class DirOpResOK implements XdrAble {
+    public FHandle file;
+    public FAttr attributes;
 
-    public diropresOK() {
+    public DirOpResOK() {
     }
 
-    public diropresOK(XdrDecodingStream xdr)
+    public DirOpResOK(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class diropresOK implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        file = new fhandle(xdr);
-        attributes = new fattr(xdr);
+        file = new FHandle(xdr);
+        attributes = new FAttr(xdr);
     }
 
 }

@@ -13,22 +13,22 @@ import org.acplt.oncrpc.server.*;
 
 /**
  */
-public abstract class mountServerStub extends OncRpcServerStub implements OncRpcDispatchable {
+public abstract class MountServerStub extends OncRpcServerStub implements OncRpcDispatchable {
 
-    public mountServerStub()
+    public MountServerStub()
            throws OncRpcException, IOException {
         this(0);
     }
 
-    public mountServerStub(int port)
+    public MountServerStub(int port)
            throws OncRpcException, IOException {
         this(null, port);
     }
 
-    public mountServerStub(InetAddress bindAddr, int port)
+    public MountServerStub(InetAddress bindAddr, int port)
            throws OncRpcException, IOException {
         info = new OncRpcServerTransportRegistrationInfo [] {
-            new OncRpcServerTransportRegistrationInfo(mount.MOUNTPROG, 1),
+            new OncRpcServerTransportRegistrationInfo(Mount.MOUNTPROG, 1),
         };
         transports = new OncRpcServerTransport [] {
             new OncRpcUdpServerTransport(this, bindAddr, port, info, 32768),
@@ -47,20 +47,20 @@ public abstract class mountServerStub extends OncRpcServerStub implements OncRpc
                 break;
             }
             case 1: {
-                dirpath args$ = new dirpath();
+                DirPath args$ = new DirPath();
                 call.retrieveCall(args$);
-                fhstatus result$ = MOUNTPROC_MNT_1(args$);
+                FHStatus result$ = MOUNTPROC_MNT_1(args$);
                 call.reply(result$);
                 break;
             }
             case 2: {
                 call.retrieveCall(XdrVoid.XDR_VOID);
-                mountlist result$ = MOUNTPROC_DUMP_1();
+                MountList result$ = MOUNTPROC_DUMP_1();
                 call.reply(result$);
                 break;
             }
             case 3: {
-                dirpath args$ = new dirpath();
+                DirPath args$ = new DirPath();
                 call.retrieveCall(args$);
                 MOUNTPROC_UMNT_1(args$);
                 call.reply(XdrVoid.XDR_VOID);
@@ -74,7 +74,7 @@ public abstract class mountServerStub extends OncRpcServerStub implements OncRpc
             }
             case 5: {
                 call.retrieveCall(XdrVoid.XDR_VOID);
-                exportlist result$ = MOUNTPROC_EXPORT_1();
+                ExportList result$ = MOUNTPROC_EXPORT_1();
                 call.reply(result$);
                 break;
             }
@@ -88,15 +88,15 @@ public abstract class mountServerStub extends OncRpcServerStub implements OncRpc
 
     public abstract void MOUNTPROC_NULL_1();
 
-    public abstract fhstatus MOUNTPROC_MNT_1(dirpath arg1);
+    public abstract FHStatus MOUNTPROC_MNT_1(DirPath arg1);
 
-    public abstract mountlist MOUNTPROC_DUMP_1();
+    public abstract MountList MOUNTPROC_DUMP_1();
 
-    public abstract void MOUNTPROC_UMNT_1(dirpath arg1);
+    public abstract void MOUNTPROC_UMNT_1(DirPath arg1);
 
     public abstract void MOUNTPROC_UMNTALL_1();
 
-    public abstract exportlist MOUNTPROC_EXPORT_1();
+    public abstract ExportList MOUNTPROC_EXPORT_1();
 
 }
 // End of mountServerStub.java

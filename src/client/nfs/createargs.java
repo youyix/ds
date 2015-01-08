@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class createargs implements XdrAble {
-    public diropargs where;
-    public sattr attributes;
+public class CreateArgs implements XdrAble {
+    public DirOpArgs where;
+    public SAttr attributes;
 
-    public createargs() {
+    public CreateArgs() {
     }
 
-    public createargs(XdrDecodingStream xdr)
+    public CreateArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class createargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        where = new diropargs(xdr);
-        attributes = new sattr(xdr);
+        where = new DirOpArgs(xdr);
+        attributes = new SAttr(xdr);
     }
 
 }

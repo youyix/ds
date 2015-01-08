@@ -7,14 +7,14 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class fhstatus implements XdrAble {
+public class FHStatus implements XdrAble {
     public int status;
-    public fhandle directory;
+    public FHandle directory;
 
-    public fhstatus() {
+    public FHStatus() {
     }
 
-    public fhstatus(XdrDecodingStream xdr)
+    public FHStatus(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -36,7 +36,7 @@ public class fhstatus implements XdrAble {
         status = xdr.xdrDecodeInt();
         switch ( status ) {
         case 0:
-            directory = new fhandle(xdr);
+            directory = new FHandle(xdr);
             break;
         default:
             break;

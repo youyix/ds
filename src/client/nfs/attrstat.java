@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class attrstat implements XdrAble {
+public class AttrStat implements XdrAble {
     public int status;
-    public fattr attributes;
+    public FAttr attributes;
 
-    public attrstat() {
+    public AttrStat() {
     }
 
-    public attrstat(XdrDecodingStream xdr)
+    public AttrStat(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -23,7 +23,7 @@ public class attrstat implements XdrAble {
            throws OncRpcException, IOException {
         xdr.xdrEncodeInt(status);
         switch ( status ) {
-        case stat.NFS_OK:
+        case Stat.NFS_OK:
             attributes.xdrEncode(xdr);
             break;
         default:
@@ -35,8 +35,8 @@ public class attrstat implements XdrAble {
            throws OncRpcException, IOException {
         status = xdr.xdrDecodeInt();
         switch ( status ) {
-        case stat.NFS_OK:
-            attributes = new fattr(xdr);
+        case Stat.NFS_OK:
+            attributes = new FAttr(xdr);
             break;
         default:
             break;

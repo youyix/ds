@@ -7,15 +7,15 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class exportlist implements XdrAble {
-    public dirpath filesys;
-    public groups groups;
-    public exportlist next;
+public class ExportList implements XdrAble {
+    public DirPath filesys;
+    public Groups groups;
+    public ExportList next;
 
-    public exportlist() {
+    public ExportList() {
     }
 
-    public exportlist(XdrDecodingStream xdr)
+    public ExportList(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -29,9 +29,9 @@ public class exportlist implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        filesys = new dirpath(xdr);
-        groups = new groups(xdr);
-        next = new exportlist(xdr);
+        filesys = new DirPath(xdr);
+        groups = new Groups(xdr);
+        next = new ExportList(xdr);
     }
 
 }

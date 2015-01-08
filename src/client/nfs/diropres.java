@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class diropres implements XdrAble {
+public class DirOpRes implements XdrAble {
     public int status;
-    public diropresOK diropok;
+    public DirOpResOK diropok;
 
-    public diropres() {
+    public DirOpRes() {
     }
 
-    public diropres(XdrDecodingStream xdr)
+    public DirOpRes(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -23,7 +23,7 @@ public class diropres implements XdrAble {
            throws OncRpcException, IOException {
         xdr.xdrEncodeInt(status);
         switch ( status ) {
-        case stat.NFS_OK:
+        case Stat.NFS_OK:
             diropok.xdrEncode(xdr);
             break;
         default:
@@ -35,8 +35,8 @@ public class diropres implements XdrAble {
            throws OncRpcException, IOException {
         status = xdr.xdrDecodeInt();
         switch ( status ) {
-        case stat.NFS_OK:
-            diropok = new diropresOK(xdr);
+        case Stat.NFS_OK:
+            diropok = new DirOpResOK(xdr);
             break;
         default:
             break;

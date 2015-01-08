@@ -7,14 +7,14 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class groups implements XdrAble {
-    public name grname;
-    public groups grnext;
+public class Groups implements XdrAble {
+    public Name grname;
+    public Groups grnext;
 
-    public groups() {
+    public Groups() {
     }
 
-    public groups(XdrDecodingStream xdr)
+    public Groups(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -27,8 +27,8 @@ public class groups implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        grname = new name(xdr);
-        grnext = new groups(xdr);
+        grname = new Name(xdr);
+        grnext = new Groups(xdr);
     }
 
 }

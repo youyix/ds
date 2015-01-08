@@ -7,18 +7,18 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class sattr implements XdrAble {
+public class SAttr implements XdrAble {
     public int mode;
     public int uid;
     public int gid;
     public int size;
-    public timeval atime;
-    public timeval mtime;
+    public TimeVal atime;
+    public TimeVal mtime;
 
-    public sattr() {
+    public SAttr() {
     }
 
-    public sattr(XdrDecodingStream xdr)
+    public SAttr(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -39,8 +39,8 @@ public class sattr implements XdrAble {
         uid = xdr.xdrDecodeInt();
         gid = xdr.xdrDecodeInt();
         size = xdr.xdrDecodeInt();
-        atime = new timeval(xdr);
-        mtime = new timeval(xdr);
+        atime = new TimeVal(xdr);
+        mtime = new TimeVal(xdr);
     }
 
 }

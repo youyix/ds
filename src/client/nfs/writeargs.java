@@ -7,17 +7,17 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class writeargs implements XdrAble {
-    public fhandle file;
+public class WriteArgs implements XdrAble {
+    public FHandle file;
     public int beginoffset;
     public int offset;
     public int totalcount;
-    public nfsdata data;
+    public NfsData data;
 
-    public writeargs() {
+    public WriteArgs() {
     }
 
-    public writeargs(XdrDecodingStream xdr)
+    public WriteArgs(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }
@@ -33,11 +33,11 @@ public class writeargs implements XdrAble {
 
     public void xdrDecode(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
-        file = new fhandle(xdr);
+        file = new FHandle(xdr);
         beginoffset = xdr.xdrDecodeInt();
         offset = xdr.xdrDecodeInt();
         totalcount = xdr.xdrDecodeInt();
-        data = new nfsdata(xdr);
+        data = new NfsData(xdr);
     }
 
 }

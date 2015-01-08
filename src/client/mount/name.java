@@ -7,18 +7,18 @@ package client.mount;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class name implements XdrAble {
+public class Name implements XdrAble {
 
     public String value;
 
-    public name() {
+    public Name() {
     }
 
-    public name(String value) {
+    public Name(String value) {
         this.value = value;
     }
 
-    public name(XdrDecodingStream xdr)
+    public Name(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }

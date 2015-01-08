@@ -7,7 +7,7 @@ package client.nfs;
 /**
  * A collection of constants used by the "nfs" ONC/RPC program.
  */
-public interface nfs {
+public interface Nfs {
     public static final int NFSPROC_READ_2 = 6;
     public static final int NFSPROC_RMDIR_2 = 15;
     public static final int NFSPROC_RENAME_2 = 11;

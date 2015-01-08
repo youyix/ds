@@ -7,14 +7,14 @@ package client.nfs;
 import org.acplt.oncrpc.*;
 import java.io.IOException;
 
-public class timeval implements XdrAble {
+public class TimeVal implements XdrAble {
     public int seconds;
     public int useconds;
 
-    public timeval() {
+    public TimeVal() {
     }
 
-    public timeval(XdrDecodingStream xdr)
+    public TimeVal(XdrDecodingStream xdr)
            throws OncRpcException, IOException {
         xdrDecode(xdr);
     }

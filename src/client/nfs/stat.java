@@ -7,7 +7,7 @@ package client.nfs;
 /**
  * Enumeration (collection of constants).
  */
-public interface stat {
+public interface Stat {
 
     public static final int NFS_OK = 0;
     public static final int NFSERR_PERM = 1;

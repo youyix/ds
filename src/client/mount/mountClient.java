@@ -14,7 +14,7 @@ import java.net.InetAddress;
  * for the MOUNTPROG remote program. It provides method stubs
  * which, when called, in turn call the appropriate remote method (procedure).
  */
-public class mountClient extends OncRpcClientStub {
+public class MountClient extends OncRpcClientStub {
 
     /**
      * Constructs a <code>mountClient</code> client stub proxy object
@@ -25,9 +25,9 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountClient(InetAddress host, int protocol)
+    public MountClient(InetAddress host, int protocol)
            throws OncRpcException, IOException {
-        super(host, mount.MOUNTPROG, 1, 0, protocol);
+        super(host, Mount.MOUNTPROG, 1, 0, protocol);
     }
 
     /**
@@ -40,9 +40,9 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountClient(InetAddress host, int port, int protocol)
+    public MountClient(InetAddress host, int port, int protocol)
            throws OncRpcException, IOException {
-        super(host, mount.MOUNTPROG, 1, port, protocol);
+        super(host, Mount.MOUNTPROG, 1, port, protocol);
     }
 
     /**
@@ -53,7 +53,7 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountClient(OncRpcClient client)
+    public MountClient(OncRpcClient client)
            throws OncRpcException, IOException {
         super(client);
     }
@@ -69,7 +69,7 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountClient(InetAddress host, int program, int version, int protocol)
+    public MountClient(InetAddress host, int program, int version, int protocol)
            throws OncRpcException, IOException {
         super(host, program, version, 0, protocol);
     }
@@ -86,7 +86,7 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountClient(InetAddress host, int program, int version, int port, int protocol)
+    public MountClient(InetAddress host, int program, int version, int port, int protocol)
            throws OncRpcException, IOException {
         super(host, program, version, port, protocol);
     }
@@ -100,7 +100,7 @@ public class mountClient extends OncRpcClientStub {
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(mount.MOUNTPROC_NULL_1, mount.MOUNTVERS, args$, result$);
+        client.call(Mount.MOUNTPROC_NULL_1, Mount.MOUNTVERS, args$, result$);
     }
 
     /**
@@ -110,10 +110,10 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public fhstatus MOUNTPROC_MNT_1(dirpath arg1)
+    public FHStatus MOUNTPROC_MNT_1(DirPath arg1)
            throws OncRpcException, IOException {
-        fhstatus result$ = new fhstatus();
-        client.call(mount.MOUNTPROC_MNT_1, mount.MOUNTVERS, arg1, result$);
+        FHStatus result$ = new FHStatus();
+        client.call(Mount.MOUNTPROC_MNT_1, Mount.MOUNTVERS, arg1, result$);
         return result$;
     }
 
@@ -123,11 +123,11 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public mountlist MOUNTPROC_DUMP_1()
+    public MountList MOUNTPROC_DUMP_1()
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
-        mountlist result$ = new mountlist();
-        client.call(mount.MOUNTPROC_DUMP_1, mount.MOUNTVERS, args$, result$);
+        MountList result$ = new MountList();
+        client.call(Mount.MOUNTPROC_DUMP_1, Mount.MOUNTVERS, args$, result$);
         return result$;
     }
 
@@ -137,10 +137,10 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public void MOUNTPROC_UMNT_1(dirpath arg1)
+    public void MOUNTPROC_UMNT_1(DirPath arg1)
            throws OncRpcException, IOException {
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(mount.MOUNTPROC_UMNT_1, mount.MOUNTVERS, arg1, result$);
+        client.call(Mount.MOUNTPROC_UMNT_1, Mount.MOUNTVERS, arg1, result$);
     }
 
     /**
@@ -152,7 +152,7 @@ public class mountClient extends OncRpcClientStub {
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
         XdrVoid result$ = XdrVoid.XDR_VOID;
-        client.call(mount.MOUNTPROC_UMNTALL_1, mount.MOUNTVERS, args$, result$);
+        client.call(Mount.MOUNTPROC_UMNTALL_1, Mount.MOUNTVERS, args$, result$);
     }
 
     /**
@@ -161,11 +161,11 @@ public class mountClient extends OncRpcClientStub {
      * @throws OncRpcException if an ONC/RPC error occurs.
      * @throws IOException if an I/O error occurs.
      */
-    public exportlist MOUNTPROC_EXPORT_1()
+    public ExportList MOUNTPROC_EXPORT_1()
            throws OncRpcException, IOException {
         XdrVoid args$ = XdrVoid.XDR_VOID;
-        exportlist result$ = new exportlist();
-        client.call(mount.MOUNTPROC_EXPORT_1, mount.MOUNTVERS, args$, result$);
+        ExportList result$ = new ExportList();
+        client.call(Mount.MOUNTPROC_EXPORT_1, Mount.MOUNTVERS, args$, result$);
         return result$;
     }
 

@@ -13,22 +13,22 @@ import org.acplt.oncrpc.server.*;
 
 /**
  */
-public abstract class nfsServerStub extends OncRpcServerStub implements OncRpcDispatchable {
+public abstract class NfsServerStub extends OncRpcServerStub implements OncRpcDispatchable {
 
-    public nfsServerStub()
+    public NfsServerStub()
            throws OncRpcException, IOException {
         this(0);
     }
 
-    public nfsServerStub(int port)
+    public NfsServerStub(int port)
            throws OncRpcException, IOException {
         this(null, port);
     }
 
-    public nfsServerStub(InetAddress bindAddr, int port)
+    public NfsServerStub(InetAddress bindAddr, int port)
            throws OncRpcException, IOException {
         info = new OncRpcServerTransportRegistrationInfo [] {
-            new OncRpcServerTransportRegistrationInfo(nfs.NFS_PROGRAM, 2),
+            new OncRpcServerTransportRegistrationInfo(Nfs.NFS_PROGRAM, 2),
         };
         transports = new OncRpcServerTransport [] {
             new OncRpcUdpServerTransport(this, bindAddr, port, info, 32768),
@@ -47,16 +47,16 @@ public abstract class nfsServerStub extends OncRpcServerStub implements OncRpcDi
                 break;
             }
             case 1: {
-                fhandle args$ = new fhandle();
+                FHandle args$ = new FHandle();
                 call.retrieveCall(args$);
-                attrstat result$ = NFSPROC_GETATTR_2(args$);
+                AttrStat result$ = NFSPROC_GETATTR_2(args$);
                 call.reply(result$);
                 break;
             }
             case 2: {
-                sattrargs args$ = new sattrargs();
+                SAttrArgs args$ = new SAttrArgs();
                 call.retrieveCall(args$);
-                attrstat result$ = NFSPROC_SETATTR_2(args$);
+                AttrStat result$ = NFSPROC_SETATTR_2(args$);
                 call.reply(result$);
                 break;
             }
@@ -67,23 +67,23 @@ public abstract class nfsServerStub extends OncRpcServerStub implements OncRpcDi
                 break;
             }
             case 4: {
-                diropargs args$ = new diropargs();
+                DirOpArgs args$ = new DirOpArgs();
                 call.retrieveCall(args$);
-                diropres result$ = NFSPROC_LOOKUP_2(args$);
+                DirOpRes result$ = NFSPROC_LOOKUP_2(args$);
                 call.reply(result$);
                 break;
             }
             case 5: {
-                fhandle args$ = new fhandle();
+                FHandle args$ = new FHandle();
                 call.retrieveCall(args$);
-                readlinkres result$ = NFSPROC_READLINK_2(args$);
+                ReadLinkRes result$ = NFSPROC_READLINK_2(args$);
                 call.reply(result$);
                 break;
             }
             case 6: {
-                readargs args$ = new readargs();
+                ReadArgs args$ = new ReadArgs();
                 call.retrieveCall(args$);
-                readres result$ = NFSPROC_READ_2(args$);
+                ReadRes result$ = NFSPROC_READ_2(args$);
                 call.reply(result$);
                 break;
             }
@@ -94,72 +94,72 @@ public abstract class nfsServerStub extends OncRpcServerStub implements OncRpcDi
                 break;
             }
             case 8: {
-                writeargs args$ = new writeargs();
+                WriteArgs args$ = new WriteArgs();
                 call.retrieveCall(args$);
-                attrstat result$ = NFSPROC_WRITE_2(args$);
+                AttrStat result$ = NFSPROC_WRITE_2(args$);
                 call.reply(result$);
                 break;
             }
             case 9: {
-                createargs args$ = new createargs();
+                CreateArgs args$ = new CreateArgs();
                 call.retrieveCall(args$);
-                diropres result$ = NFSPROC_CREATE_2(args$);
+                DirOpRes result$ = NFSPROC_CREATE_2(args$);
                 call.reply(result$);
                 break;
             }
             case 10: {
-                diropargs args$ = new diropargs();
+                DirOpArgs args$ = new DirOpArgs();
                 call.retrieveCall(args$);
                 XdrInt result$ = new XdrInt(NFSPROC_REMOVE_2(args$));
                 call.reply(result$);
                 break;
             }
             case 11: {
-                renameargs args$ = new renameargs();
+                RenameArgs args$ = new RenameArgs();
                 call.retrieveCall(args$);
                 XdrInt result$ = new XdrInt(NFSPROC_RENAME_2(args$));
                 call.reply(result$);
                 break;
             }
             case 12: {
-                linkargs args$ = new linkargs();
+                LinkArgs args$ = new LinkArgs();
                 call.retrieveCall(args$);
                 XdrInt result$ = new XdrInt(NFSPROC_LINK_2(args$));
                 call.reply(result$);
                 break;
             }
             case 13: {
-                symlinkargs args$ = new symlinkargs();
+                SymlinkArgs args$ = new SymlinkArgs();
                 call.retrieveCall(args$);
                 XdrInt result$ = new XdrInt(NFSPROC_SYMLINK_2(args$));
                 call.reply(result$);
                 break;
             }
             case 14: {
-                createargs args$ = new createargs();
+                CreateArgs args$ = new CreateArgs();
                 call.retrieveCall(args$);
-                diropres result$ = NFSPROC_MKDIR_2(args$);
+                DirOpRes result$ = NFSPROC_MKDIR_2(args$);
                 call.reply(result$);
                 break;
             }
             case 15: {
-                diropargs args$ = new diropargs();
+                DirOpArgs args$ = new DirOpArgs();
                 call.retrieveCall(args$);
                 XdrInt result$ = new XdrInt(NFSPROC_RMDIR_2(args$));
                 call.reply(result$);
                 break;
             }
             case 16: {
-                readdirargs args$ = new readdirargs();
+                ReadDirArgs args$ = new ReadDirArgs();
                 call.retrieveCall(args$);
-                readdirres result$ = NFSPROC_READDIR_2(args$);
+                ReadDirRes result$ = NFSPROC_READDIR_2(args$);
                 call.reply(result$);
                 break;
             }
             case 17: {
-                fhandle args$ = new fhandle();
+                FHandle args$ = new FHandle();
                 call.retrieveCall(args$);
-                statfsres result$ = NFSPROC_STATFS_2(args$);
+                StatFsRes result$ = NFSPROC_STATFS_2(args$);
                 call.reply(result$);
                 break;
             }
@@ -173,39 +173,39 @@ public abstract class nfsServerStub extends OncRpcServerStub implements OncRpcDi
 
     public abstract void NFSPROC_NULL_2();
 
-    public abstract attrstat NFSPROC_GETATTR_2(fhandle arg1);
+    public abstract AttrStat NFSPROC_GETATTR_2(FHandle arg1);
 
-    public abstract attrstat NFSPROC_SETATTR_2(sattrargs arg1);
+    public abstract AttrStat NFSPROC_SETATTR_2(SAttrArgs arg1);
 
     public abstract void NFSPROC_ROOT_2();
 
-    public abstract diropres NFSPROC_LOOKUP_2(diropargs arg1);
+    public abstract DirOpRes NFSPROC_LOOKUP_2(DirOpArgs arg1);
 
-    public abstract readlinkres NFSPROC_READLINK_2(fhandle arg1);
+    public abstract ReadLinkRes NFSPROC_READLINK_2(FHandle arg1);
 
-    public abstract readres NFSPROC_READ_2(readargs arg1);
+    public abstract ReadRes NFSPROC_READ_2(ReadArgs arg1);
 
     public abstract void NFSPROC_WRITECACHE_2();
 
-    public abstract attrstat NFSPROC_WRITE_2(writeargs arg1);
+    public abstract AttrStat NFSPROC_WRITE_2(WriteArgs arg1);
 
-    public abstract diropres NFSPROC_CREATE_2(createargs arg1);
+    public abstract DirOpRes NFSPROC_CREATE_2(CreateArgs arg1);
 
-    public abstract int NFSPROC_REMOVE_2(diropargs arg1);
+    public abstract int NFSPROC_REMOVE_2(DirOpArgs arg1);
 
-    public abstract int NFSPROC_RENAME_2(renameargs arg1);
+    public abstract int NFSPROC_RENAME_2(RenameArgs arg1);
 
-    public abstract int NFSPROC_LINK_2(linkargs arg1);
+    public abstract int NFSPROC_LINK_2(LinkArgs arg1);
 
-    public abstract int NFSPROC_SYMLINK_2(symlinkargs arg1);
+    public abstract int NFSPROC_SYMLINK_2(SymlinkArgs arg1);
 
-    public abstract diropres NFSPROC_MKDIR_2(createargs arg1);
+    public abstract DirOpRes NFSPROC_MKDIR_2(CreateArgs arg1);
 
-    public abstract int NFSPROC_RMDIR_2(diropargs arg1);
+    public abstract int NFSPROC_RMDIR_2(DirOpArgs arg1);
 
-    public abstract readdirres NFSPROC_READDIR_2(readdirargs arg1);
+    public abstract ReadDirRes NFSPROC_READDIR_2(ReadDirArgs arg1);
 
-    public abstract statfsres NFSPROC_STATFS_2(fhandle arg1);
+    public abstract StatFsRes NFSPROC_STATFS_2(FHandle arg1);
 
 }
 // End of nfsServerStub.java

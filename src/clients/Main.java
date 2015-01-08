@@ -35,7 +35,8 @@ public class Main {
 			System.exit(0);
 		} else if (args[h].equals("-mode2") ) {
 			mode2(args, h+1);
-			System.exit(0);
+		} else {
+			System.out.println(usage());
 		}
 	}
 	

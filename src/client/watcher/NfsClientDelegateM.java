@@ -67,7 +67,7 @@ public class NfsClientDelegateM {
 		String localDir = "/Users/niezhenfei/kkkk";
 		
 		NfsClientDelegateM m = new NfsClientDelegateM(host, host2, remoteDir, remoteDir2, Paths.get(localDir));
-		System.out.println("-end-");
+//		System.out.println("-end-");
 	}
 	
 	
@@ -190,7 +190,7 @@ public class NfsClientDelegateM {
 			e.printStackTrace();
 		}
 		if ( dr.status != Stat.NFS_OK ) {
-			System.err.println("fff " + dr.status);
+//			System.err.println("fff " + dr.status);
 		} else {
 			return dr;
 		}
@@ -354,7 +354,7 @@ public class NfsClientDelegateM {
 		
 		DirOpRes res = lookup(i, fh, filename);
 		if (res == null) {
-			System.out.println("xxxxx" + i);
+//			System.out.println("xxxxx" + i);
 			return flag;
 		}
 		if ( res.status != Stat.NFS_OK ) {
@@ -376,9 +376,9 @@ public class NfsClientDelegateM {
 			e.printStackTrace();
 		}
 	    if ( as.status != Stat.NFS_OK ) {
-	       System.out.println("7 Not Fine " + as.status);
+//	       System.out.println("7 Not Fine " + as.status);
 	    } else {
-	       System.out.println("7 Fine");
+//	       System.out.println("7 Fine");
 	    	flag = true;
 	    }
 		return flag;

@@ -184,9 +184,9 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 		if ( dp.status != Stat.NFS_OK ) {
-		    System.out.println("4 Not Fine " + dp.status);
+//		    System.out.println("4 Not Fine " + dp.status);
 		} else {
-		    System.out.println("4 Fine");
+//		    System.out.println("4 Fine");
 		    flag = true;
 		}
 		return flag;
@@ -228,9 +228,9 @@ public class NfsClientDelegate {
 			e.printStackTrace();
 		}
 	    if ( as.status != Stat.NFS_OK ) {
-	       System.out.println("7 Not Fine " + as.status);
+//	       System.out.println("7 Not Fine " + as.status);
 	    } else {
-	       System.out.println("7 Fine");
+//	       System.out.println("7 Fine");
 	    }
 		return flag;
 	}

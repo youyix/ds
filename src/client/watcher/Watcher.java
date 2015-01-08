@@ -64,7 +64,7 @@ public class Watcher extends Thread{
 	}
 
 	public void start() {
-		System.err.println("Thread for " + localDir);
+//		System.err.println("Thread for " + localDir);
 		super.start();
 	}
 	

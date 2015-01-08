@@ -118,6 +118,7 @@ public class InteractiveControl {
 	
 	public void run() {
 		System.out.println(host + ":" + remoteDir + " has mounted.");
+		System.out.println(commands());
 		Scanner in = new Scanner(System.in);
 		String s = "";
 		while((s = in.next()) != null) {
@@ -218,20 +219,53 @@ public class InteractiveControl {
 		}
 		
 	}
-	
-	public void watch() {
-		watcher.start();
-	}
-	public void stopWatch() {
-		watcher.terminates();
+	public String commands() {
+		String str = "|-----------------------|\nAvailable Commands\n";
+		String cm1 = "01. ls\n";
+		String cm2 = "02. ll\n";
+		String cm3 = "03. show numberOfEntry\n";
+		String cm4 = "04. open numberOfEntry(not dir)\n";
+		String cm5 = "05. download numberOfEntry(not dir)\n";
+		String cm6 = "06. cd numberOfEntry(dir only)\n";
+		String cm7 = "07. mkdir dirname\n";
+		String cm8 = "08. touch filename\n";
+		String cm9 = "09. rename numberOfEntry newFilename(not dir)\n";
+		String cm10 = "10. remove numberOfEntry(not dir)\n";
+		String cm0 = "00. exit\n|-----------------------|\n";
+		
+		
+		return str + cm1 + cm2 + cm3 + cm4 + cm5 + cm6 + cm7 + cm8 + cm9 + cm10 + cm0;
 	}
 	
 	public static void main(String args[]) {
+		if ( args.length != 3 && args.length != 1 ) {
+			System.out.println(usage());
+			System.exit(0);
+		}
+		String host = "";
+		String remoteDir = "";
+		String localDir = "";
+		try {
+			host = args[0];
+			remoteDir = args[1];
+			localDir = args[2];
+		} catch(Exception e) {
+//			System.out.println(usage());
+//			System.exit(0);
+			host = "192.168.0.12";
+			remoteDir = "/Users/cici/nfss";
+			localDir = "/Users/niezhenfei/kkk";
+		}
 		
-		
-		
-		InteractiveControl ic = new InteractiveControl("192.168.0.12", "/Users/cici/nfss", Paths.get("/Users/niezhenfei/kkk"));
+		InteractiveControl ic = new InteractiveControl(host, remoteDir, Paths.get(localDir));
 		ic.run();
 		
+	}
+	
+	public static String usage() {
+		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl parameters\n";
+		str += "paramters: \n";
+		str += "server_ip shared_folder_path loca_folder_path\n";
+		return str;
 	}
 }

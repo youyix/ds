@@ -2,7 +2,6 @@ package client.watcher;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,7 +20,6 @@ import client.nfs.CreateArgs;
 import client.nfs.DirOpArgs;
 import client.nfs.DirOpRes;
 import client.nfs.FAttr;
-import client.nfs.FHandle;
 import client.nfs.FileName;
 import client.nfs.NfsClient;
 import client.nfs.NfsData;

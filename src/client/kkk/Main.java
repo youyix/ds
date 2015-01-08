@@ -52,8 +52,8 @@ public class Main {
 	 * @throws OncRpcException 
 	 */
 	public static void main(String[] args) throws OncRpcException, IOException {
-//		tryKO();
-		try0();
+		tryKO();
+//		try0();
 	}
 	
 	public static void tryKO() throws OncRpcException, IOException {

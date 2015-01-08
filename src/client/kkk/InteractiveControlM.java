@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import client.encryption.KeyOperator;
-import client.watcher.Watcher;
+import client.watcher.Watcher2;
 
 
 public class InteractiveControlM {
@@ -19,7 +19,7 @@ public class InteractiveControlM {
 	private Path currentPath;
 	private Path currentPath2;
 	private Path local;
-	private Watcher watcher;
+	private Watcher2 watcher;
 	
 	public InteractiveControlM(String host, String host2, String remoteDir, String remoteDir2, Path dir) {
 		this.host = host;
@@ -31,17 +31,18 @@ public class InteractiveControlM {
 		currentPath = Paths.get(this.remoteDir);
 		currentPath2 = Paths.get(this.remoteDir2);
 		
-//		try {
-////			watcher = new Watcher(host, host2, remoteDir, remoteDir2, dir);
-////			watcher.start();
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			watcher = new Watcher2(host, host2, remoteDir, remoteDir2, dir);
+			watcher.start();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void listFiles(boolean verbose) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		if ( ews == null ) {
 			System.out.println("Empty dir");
 			return;
@@ -69,7 +70,7 @@ public class InteractiveControlM {
 		if ( ! download(i) ) {
 			return;
 		}
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
 		String filepath = Utils.convertPath(currentPath, local, e.filename.value).toString();
 		String command = "subl " + filepath;
@@ -83,40 +84,40 @@ public class InteractiveControlM {
 	}
 	
 	public boolean rename(int i, String toFilename) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
-		return nfsc.renameM(currentPath, e.filename.value, toFilename);
+		return nfsc.rename(currentPath, e.filename.value, toFilename);
 	}
 	
 	public boolean mkDir(String dirname) {
-		return nfsc.mkdirM(currentPath, dirname);
+		return nfsc.mkdir(currentPath, dirname);
 	}
 	
 	public boolean createFile(String filename) {
-		return nfsc.createFileM(currentPath, filename);
+		return nfsc.createFile(currentPath, filename);
 	}
 	
 	
 	public boolean download(int i) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
-		return nfsc.readFileM(currentPath, e.filename.value, e);
+		return nfsc.readFile(currentPath, e.filename.value, e);
 	}
 	
 	public boolean delete(int i) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
-		return nfsc.deleteFileM(currentPath, e.filename.value);
+		return nfsc.deleteFile(currentPath, e.filename.value);
 	} 
 	
 	public void getAttr(int i) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
 		System.out.println(Utils.FAttr2String(e.attribute));
 	} 
 	
 	public boolean cd(int i) {
-		List<EntryWrapper> ews = nfsc.readDirM(currentPath, "");
+		List<EntryWrapper> ews = nfsc.readDir(currentPath, "");
 		EntryWrapper e = ews.get(i);
 		currentPath = currentPath.resolve(e.filename.value);
 		return true;
@@ -124,6 +125,7 @@ public class InteractiveControlM {
 	
 	public void run() {
 		System.out.println(host + ":" + remoteDir + " has mounted.");
+		System.out.println(host + ":" + remoteDir2 + " has mounted.");
 		System.out.println(commands());
 		System.out.print("> ");
 		Scanner in = new Scanner(System.in);
@@ -217,7 +219,10 @@ public class InteractiveControlM {
 				}
 			}
  			else if (s.equals("exit")) {
-				watcher.terminates();
+ 				if (watcher!=null) {
+ 					watcher.terminates();
+ 				}
+				
 				System.exit(0);
 			}
 			else {
@@ -245,62 +250,62 @@ public class InteractiveControlM {
 		
 		return str + cm1 + cm2 + cm3 + cm4 + cm5 + cm6 + cm7 + cm8 + cm9 + cm10 + cm0;
 	}
-	
-	public static void main(String args[]) {
-		if ( args.length == -1  ) {
-			System.out.println(usage());
-			System.exit(0);
-		}
-		
-		int hop = parseOption(args, 0);
-		
-		String host = "";
-		String host2 = "";
-		String remoteDir = "";
-		String remoteDir2 = "";
-		String localDir = "";
-		try {
-			host = args[0 + hop];
-			remoteDir = args[1 + hop];
-			remoteDir2 = args[2 + hop];
-			localDir = args[3 + hop];
-		} catch(Exception e) {
-			host = "192.168.0.12";
-			host2 = "192.168.0.15";
-			remoteDir = "/Users/cici/nfss";
-			remoteDir2 = "/Users/niezhenfei/nfss";
-			localDir = "/Users/niezhenfei/kkkk";
-		}
-		
-		InteractiveControlM ic = new InteractiveControlM(host, host2, remoteDir, remoteDir2, Paths.get(localDir));
-		ic.run();
-		
-	}
-	
-	public static int parseOption(String args[], int h) {
-		if ( args[h].equals("-i") ) {
-			String keyfile = args[h + 1];
-			KeyOperator.importKey(Paths.get(keyfile));
-			System.out.println("Key file imported.");
-			h = h+2;
-		} else if (args[h].equals("-e") ) {
-			String password = args[h+1];
-			KeyOperator.exportKey(password);
-			System.out.println("Key file exported.");
-			System.exit(0);
-		}
-		return h;
-	}
-	
-	public static String usage() {
-		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl options parameters\n";
-		String option = "Options\n-i keyfileath: import key file\n";
-		String option2 = "-e password: export key file\n";
-		
-		str += option;
-		str += option2;
-		str += "Paramters: \n";
-		str += "server_ip shared_folder_path loca_folder_path\n";
-		return str;
-	}
+//	
+//	public static void main(String args[]) {
+//		if ( args.length == -1  ) {
+//			System.out.println(usage());
+//			System.exit(0);
+//		}
+//		
+//		int hop = parseOption(args, 0);
+//		
+//		String host = "";
+//		String host2 = "";
+//		String remoteDir = "";
+//		String remoteDir2 = "";
+//		String localDir = "";
+//		try {
+//			host = args[0 + hop];
+//			remoteDir = args[1 + hop];
+//			remoteDir2 = args[2 + hop];
+//			localDir = args[3 + hop];
+//		} catch(Exception e) {
+//			host = "192.168.0.12";
+//			host2 = "192.168.0.15";
+//			remoteDir = "/Users/cici/nfss";
+//			remoteDir2 = "/Users/niezhenfei/nfss";
+//			localDir = "/Users/niezhenfei/kkkk";
+//		}
+//		
+//		InteractiveControlM ic = new InteractiveControlM(host, host2, remoteDir, remoteDir2, Paths.get(localDir));
+//		ic.run();
+//		
+//	}
+//	
+//	public static int parseOption(String args[], int h) {
+//		if ( args[h].equals("-i") ) {
+//			String keyfile = args[h + 1];
+//			KeyOperator.importKey(Paths.get(keyfile));
+//			System.out.println("Key file imported.");
+//			h = h+2;
+//		} else if (args[h].equals("-e") ) {
+//			String password = args[h+1];
+//			KeyOperator.exportKey(password);
+//			System.out.println("Key file exported.");
+//			System.exit(0);
+//		}
+//		return h;
+//	}
+//	
+//	public static String usage() {
+//		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl options parameters\n";
+//		String option = "Options\n-i keyfileath: import key file\n";
+//		String option2 = "-e password: export key file\n";
+//		
+//		str += option;
+//		str += option2;
+//		str += "Paramters: \n";
+//		str += "server_ip shared_folder_path loca_folder_path\n";
+//		return str;
+//	}
 }

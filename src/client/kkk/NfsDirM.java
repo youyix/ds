@@ -66,14 +66,29 @@ public class NfsDirM {
 		this.host2 = host2;
 		this.remoteDir = remoteDir;
 		this.remoteDir2 = remoteDir2;
-		nfsc = mount(nfsc, host, remoteDir, 1);
-		nfsc2 = mount(nfsc2, host2, remoteDir2, 2);
+		nfsc = mount(1);
+		nfsc2 = mount(2);
 	}
 	
-	public NfsClient mount(NfsClient nfss, String hostt, String mntPoint, int i){
+	public NfsClient mount(int i){
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+		}
+
 		InetAddress ia = null;
 		try {
-			ia = InetAddress.getByName(hostt);
+			ia = InetAddress.getByName(host);
 		} catch (UnknownHostException e2) {
 			e2.printStackTrace();
 			System.exit(0);
@@ -91,6 +106,7 @@ public class NfsDirM {
 		FHStatus fh = null;
 		try {
 			fh = mnt.MOUNTPROC_MNT_1(new DirPath(mntPoint));
+			
 		} catch (OncRpcAuthenticationException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -105,7 +121,7 @@ public class NfsDirM {
 		} else {
 		  byte[] hh = fh.directory.value;
 		  if (i==1) {
-			  root = new client.nfs.FHandle(hh);
+			  this.root = new client.nfs.FHandle(hh);
 		  } else {
 			  root2 = new client.nfs.FHandle(hh);
 		  }
@@ -120,7 +136,24 @@ public class NfsDirM {
 		return nfss;
 	}
 	
-	public client.nfs.FHandle doo(NfsClient nfss, Path p) {
+	public client.nfs.FHandle doo(int i, Path p) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
 		client.nfs.FHandle fh = null;
 		if ( nfss.hashCode() == nfsc.hashCode() ) {
 			fh = root;
@@ -128,8 +161,8 @@ public class NfsDirM {
 			fh = root2;
 		}
 		
-		for ( int i=downloadDir.getNameCount(); i<p.getNameCount(); i++ ) {
-			Path pp = p.getName(i);
+		for ( int i1=downloadDir.getNameCount(); i1<p.getNameCount(); i1++ ) {
+			Path pp = p.getName(i1);
 			DirOpRes res = lookup(nfss, fh, pp.toString());
 			if ( res.status == Stat.NFS_OK ) {
 				fh = res.diropok.file;
@@ -162,16 +195,33 @@ public class NfsDirM {
 	}
 	
 	
-	public boolean createFileM(Path p, String filename) {
-		boolean f = createFile(nfsc, p, filename);
-		boolean g = createFile(nfsc2, p, filename);
+	public boolean createFile(Path p, String filename) {
+		boolean f = createFileM(1, p, filename);
+		boolean g = createFileM(2, p, filename);
 		return f && g;
 	}
 	
-	public boolean createFile(NfsClient nfss, Path p, String filename) {
+	public boolean createFileM(int i, Path p, String filename) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
 		boolean flag = false;	
 		
-		client.nfs.FHandle fh =  doo(nfss, p);
+		client.nfs.FHandle fh =  doo(i, p);
 		
 		//create new dir
 		DirOpArgs where = new DirOpArgs();
@@ -204,16 +254,34 @@ public class NfsDirM {
 		return flag;
 	}
 	
-	public boolean mkdirM(Path p, String filename) {
-		boolean f = mkDir(nfsc, p, filename);
-		boolean g = mkDir(nfsc2, p, filename);
+	public boolean mkdir(Path p, String filename) {
+		boolean f = mkDirM(1, p, filename);
+		boolean g = mkDirM(2, p, filename);
 		return f && g;
 	}
 	
-	public boolean mkDir(NfsClient nfss, Path p, String dirname) {
+	public boolean mkDirM(int i, Path p, String dirname) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		
 		boolean flag = false;
 		
-		client.nfs.FHandle fh = doo(nfss, p);
+		client.nfs.FHandle fh = doo(i, p);
 		//create new dir
 		DirOpArgs where = new DirOpArgs();
 		where.dir = fh;
@@ -245,7 +313,7 @@ public class NfsDirM {
 		return flag;
 	}
 	
-	public boolean writeFileM(Path p, String filename) {
+	public boolean writeFile(Path p, String filename) {
 		Path file = Paths.get(p.toString(), filename);
 		byte[] fileArray = null;
 		try {
@@ -256,14 +324,32 @@ public class NfsDirM {
 		ByteBuffer[] bbs = NfsShamir.split(2, fileArray);
 //		fileArray = Encryption.getInstance().encrypt(fileArray);
 		
-		boolean f = writeFile(nfsc, p, filename, bbs[0].array());
-		boolean g = writeFile(nfsc2, p, filename, bbs[1].array());
+		boolean f = writeFileM(1, p, filename, bbs[0].array());
+		boolean g = writeFileM(2, p, filename, bbs[1].array());
 		return f && g;
 	}
 	
-	public boolean writeFile(NfsClient nfss, Path p, String filename, byte[] fileArray) {
+	public boolean writeFileM(int i, Path p, String filename, byte[] fileArray) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		
 		boolean flag = false;
-		client.nfs.FHandle fh = doo(nfss, p);
+		client.nfs.FHandle fh = doo(i, p);
 		
 		
 		DirOpRes res =  lookup(nfss, fh, filename);
@@ -292,12 +378,29 @@ public class NfsDirM {
 		return flag;
 	}
 
-	public FAttr getAttrM(Path p, String filename) {
-		return getAttr(nfsc, p, filename);
+	public FAttr getAttr(Path p, String filename) {
+		return getAttrM(1, p, filename);
 	}
 	
-	public FAttr getAttr(NfsClient nfss, Path p, String filename) {
-		client.nfs.FHandle fh = doo(nfss, Paths.get(p.toString(), filename));
+	public FAttr getAttrM(int i, Path p, String filename) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		client.nfs.FHandle fh = doo(i, Paths.get(p.toString(), filename));
 		AttrStat as = null;
 		try {
 			as = nfss.NFSPROC_GETATTR_2(fh);
@@ -310,13 +413,29 @@ public class NfsDirM {
 		return null;
 	}
 	
-	public List<EntryWrapper> readDirM(Path p, String dirname) {
-		return readDir(nfsc, p, dirname);
+	public List<EntryWrapper> readDir(Path p, String dirname) {
+		return readDirM(1, p, dirname);
 	}
 	
-	public List<EntryWrapper> readDir(NfsClient nfss, Path p, String dirname) {
+	public List<EntryWrapper> readDirM(int i, Path p, String dirname) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
 		
-		client.nfs.FHandle fh = doo(nfss, Paths.get(p.toString(), dirname));
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		client.nfs.FHandle fh = doo(i, Paths.get(p.toString(), dirname));
 		System.out.println(Paths.get(p.toString(), dirname));
 		ReadDirArgs rda = new ReadDirArgs();
 		rda.dir = fh;
@@ -341,7 +460,7 @@ public class NfsDirM {
 		    Entry e = entries;
 		    if ( rdr.readdirok.entries != null ) {
 		        do { 
-		        	FAttr attr = getAttr(nfss, p, e.name.value);
+		        	FAttr attr = getAttrM(i, p, e.name.value);
 		        	
 		        	if ( (attr != null && ! e.name.value.startsWith(".") ) || e.name.value.equals("..") ) {
 		        		ews.add(new EntryWrapper(e.name, attr));
@@ -356,17 +475,16 @@ public class NfsDirM {
 		        return ews;
 		    } else {
 		    	return ews;
-//		        System.out.println("EMPTY Dir or the `count` is too small");
 		    }
 		}
 		return null;
 
 	}
 	
-	public boolean readFileM(Path p, String filename, EntryWrapper entry) {
+	public boolean readFile(Path p, String filename, EntryWrapper entry) {
 		ByteBuffer[] bbs = new ByteBuffer[2];
-		byte[] b1 = readFile(nfsc, p, filename, entry);
-		byte[] b2 = readFile(nfsc2, p, filename, entry);
+		byte[] b1 = readFileM(1, p, filename, entry);
+		byte[] b2 = readFileM(2, p, filename, entry);
 		
 		bbs[0] = ByteBuffer.wrap(b1);
 		bbs[1] = ByteBuffer.wrap(b2);
@@ -385,8 +503,25 @@ public class NfsDirM {
 	}
 
 	
-	public byte[] readFile(NfsClient nfss, Path p, String filename, EntryWrapper entry) {
-		client.nfs.FHandle fh = doo(nfss, Paths.get(p.toString(), filename));
+	public byte[] readFileM(int i, Path p, String filename, EntryWrapper entry) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		client.nfs.FHandle fh = doo(i, Paths.get(p.toString(), filename));
 		ReadArgs ra = new ReadArgs();
 		ra.file = fh;
 		ra.offset = 0;
@@ -408,14 +543,31 @@ public class NfsDirM {
 		return null;
 	}
 	
-	public boolean renameM(Path p, String fromFilename, String toFilename) {
-		boolean f = rename(nfsc, p, fromFilename, toFilename);
-		boolean g = rename(nfsc2, p, fromFilename, toFilename);
+	public boolean rename(Path p, String fromFilename, String toFilename) {
+		boolean f = renameM(1, p, fromFilename, toFilename);
+		boolean g = renameM(2, p, fromFilename, toFilename);
 		return f && g;
 	}
 
-	public boolean rename(NfsClient nfss, Path p, String fromFilename, String toFilename) {
-		client.nfs.FHandle fh = doo(nfss, Paths.get(p.toString()));
+	public boolean renameM(int i, Path p, String fromFilename, String toFilename) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		client.nfs.FHandle fh = doo(i, Paths.get(p.toString()));
 		DirOpArgs from = new DirOpArgs();
 		from.dir = fh;
 		from.name = new FileName(fromFilename);
@@ -444,14 +596,31 @@ public class NfsDirM {
 		return false;
 	}
 
-	public boolean deleteFileM(Path p, String filename) {
-		boolean f = deleteFile(nfsc, p, filename);
-		boolean g = deleteFile(nfsc2, p, filename);
+	public boolean deleteFile(Path p, String filename) {
+		boolean f = deleteFileM(1, p, filename);
+		boolean g = deleteFileM(2, p, filename);
 		return f && g;
 	}
 	
-	public boolean deleteFile(NfsClient nfss, Path p, String filename) {
-		client.nfs.FHandle fh = doo(nfss, Paths.get(p.toString(), filename));
+	public boolean deleteFileM(int i, Path p, String filename) {
+		String host = "";
+		String mntPoint = "";
+		NfsClient nfss = null;
+		client.nfs.FHandle root = null;
+		
+		if ( i == 1 ) {
+			host = this.host;
+			mntPoint = remoteDir;
+			root = this.root;
+			nfss = nfsc;
+		} else {
+			host = this.host2;
+			mntPoint = remoteDir2;
+			nfss = nfsc2;
+			root = root2;
+		}
+
+		client.nfs.FHandle fh = doo(i, Paths.get(p.toString(), filename));
 		DirOpArgs doa = new DirOpArgs();
 		doa.dir = root;
 		doa.name = new FileName(filename);

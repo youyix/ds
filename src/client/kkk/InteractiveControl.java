@@ -241,58 +241,5 @@ public class InteractiveControl {
 		return str + cm1 + cm2 + cm3 + cm4 + cm5 + cm6 + cm7 + cm8 + cm9 + cm10 + cm0;
 	}
 	
-	public static void main(String args[]) {
-		if ( args.length == -1  ) {
-			System.out.println(usage());
-			System.exit(0);
-		}
-		
-		int hop = parseOption(args, 0);
-		
-		String host = "";
-		String remoteDir = "";
-		String localDir = "";
-		try {
-			host = args[0 + hop];
-			remoteDir = args[1 + hop];
-			localDir = args[2 + hop];
-		} catch(Exception e) {
-//			System.out.println(usage());
-//			System.exit(0);
-			host = "192.168.0.12";
-			remoteDir = "/Users/cici/nfss";
-			localDir = "/Users/niezhenfei/kkk";
-		}
-		
-		InteractiveControl ic = new InteractiveControl(host, remoteDir, Paths.get(localDir));
-		ic.run();
-		
-	}
 	
-	public static int parseOption(String args[], int h) {
-		if ( args[h].equals("-i") ) {
-			String keyfile = args[h + 1];
-			KeyOperator.importKey(Paths.get(keyfile));
-			System.out.println("Key file imported.");
-			h = h+2;
-		} else if (args[h].equals("-e") ) {
-			String password = args[h+1];
-			KeyOperator.exportKey(password);
-			System.out.println("Key file exported.");
-			System.exit(0);
-		}
-		return h;
-	}
-	
-	public static String usage() {
-		String str = "Usage: java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl options parameters\n";
-		String option = "Options\n-i keyfileath: import key file\n";
-		String option2 = "-e password: export key file\n";
-		
-		str += option;
-		str += option2;
-		str += "Paramters: \n";
-		str += "server_ip shared_folder_path loca_folder_path\n";
-		return str;
-	}
 }

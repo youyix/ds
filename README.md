@@ -11,19 +11,19 @@ In this project, we are implemented a NFS version 2 client (and dependencies) in
 
 
 ##The synchronization
-(a) A file system watcher capable of intercepting events and reading files and folders from a local file system
-(b) A MOUNT client able to retrieve the file handle of the share root
-(c) An NFS client able to:
+- A file system watcher capable of intercepting events and reading files and folders from a local file system
+- A MOUNT client able to retrieve the file handle of the share root
+- An NFS client able to:
     i. Create, read, and navigate folders ii. Read and set attributes
     iii. Create, read and write files
-(d) A helper application to restore files from the server on demand, i.e., read files from the server and writing them locally.
+- A helper application to restore files from the server on demand, i.e., read files from the server and writing them locally.
 
 ##The encryption
-(a) Use AES to encrypt and decrypt data
-(b) Generate, persist and export encryption keys
-(c) Extend the helper app to restore encrypted files
+- Use AES to encrypt and decrypt data
+- Generate, persist and export encryption keys
+- Extend the helper app to restore encrypted files
 
 ##The advanced security
-(a) Extend the synchronization code to support more than one server in parallel
-(b) Use Shamir’s secret sharing scheme to split and join data for two separate servers 
-(c) Extend the helper app to restore files that have been split between two servers
+- Extend the synchronization code to support more than one server in parallel
+- Use Shamir’s secret sharing scheme to split and join data for two separate servers 
+- Extend the helper app to restore files that have been split between two servers

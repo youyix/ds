@@ -27,3 +27,34 @@ In this project, we are implemented a NFS version 2 client (and dependencies) in
 - Extend the synchronization code to support more than one server in parallel
 - Use Shamir’s secret sharing scheme to split and join data for two separate servers 
 - Extend the helper app to restore files that have been split between two servers
+
+#Usage
+To compile:
+-----------
+javac -cp lib/oncrpc.jar src/client/*/*.java  (at ./)
+
+or 
+
+in Eclipse IDE
+
+To run:
+-------
+at ./bin/
+java -cp .:../lib/oncrpc.jar client/kkk/InteractiveControl 192.168.0.12 /Users/cici/nfss /Users/niezhenfei/kkk
+
+or
+
+in Eclipse IDE
+
+
+Example usage:
+-------------
+
+Generate and export key:
+java -cp .:../lib/oncrpc.jar clients.Main -export apassword
+
+Run at mode 1
+java -cp .:../lib/oncrpc.jar clients.Main -import secretKey.nfskey  192.168.0.12 /Users/cici/nfss ~/kkk
+
+Run at mode 2
+java -cp .:../lib/oncrpc.jar clients.Main -mode2 192.168.0.12 /Users/cici/nfss 192.168.0.15 /Users/niezhenfei/nfss ~/kkk
